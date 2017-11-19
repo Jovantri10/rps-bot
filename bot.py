@@ -54,5 +54,13 @@ class RPSBot(commands.Bot):
         await member.remove_roles(muted)
         await ctx.send(f"Unmuted {member}. 👍")
 
+    @commands.command()
+    @commands.has_permissions(manage_messages=True)
+    async def purge(self, ctx, messages: int):
+        '''Purge messages! This command isn't as crappy as the movie though.'''
+        async for message in ctx.channel.history(limit=messages):
+            await message.delete()
+        await ctx.send(f"Deleted {messages} messages. 👍")
+
 if __name__ == '__main__':
     RPSBot().run("MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs")
