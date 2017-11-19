@@ -66,7 +66,7 @@ class RPSBot(commands.Bot):
     @commands.command()
     async def poll(self, ctx, poll):
         '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 9 choices.'''
-        num_list = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"]
+        numlist = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"]
         choices = poll.split('|')
         question = choices[0]
         choices.pop(0)
