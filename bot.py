@@ -58,6 +58,7 @@ class RPSBot(commands.Bot):
     @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, messages: int):
         '''Purge messages! This command isn't as crappy as the movie though.'''
+        await ctx.message.delete()
         async for message in ctx.channel.history(limit=messages):
             await message.delete()
         await ctx.send(f"Deleted {messages} messages. 👍")
