@@ -65,7 +65,7 @@ class RPSBot(commands.Bot):
         await ctx.send(f"Deleted {messages} messages. 👍")
 
     @commands.command()
-    async def poll(self, ctx, poll):
+    async def poll(self, ctx, *, poll):
         '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices.'''
         nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
         numlist = []
@@ -82,9 +82,11 @@ class RPSBot(commands.Bot):
         sent_message = await ctx.send(embed=em)
         for n in range(len(choices)):
             await sent_message.add_reaction(numlist[n])
-        await asyncio.sleep(60)
+        await asyncio.sleep(5)
+        sent_message = await ctx.channel.get_message(sent_message.id)
         em.title = f"Results!"
-        em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{sent_message.reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
+        reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1, reverse=True)
+        em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
         await ctx.send(embed=em)
 
 if __name__ == '__main__':
