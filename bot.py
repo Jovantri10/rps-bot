@@ -63,5 +63,24 @@ class RPSBot(commands.Bot):
             await message.delete()
         await ctx.send(f"Deleted {messages} messages. 👍")
 
+    @commands.command()
+    async def poll(self, ctx, poll):
+        '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 9 choices.'''
+        num_list = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"]
+        choices = poll.split('|')
+        question = choices[0]
+        choices.pop(0)
+        em = discord.Embed(color=0x181818, title=question)
+        em.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+        question_list = [f"{numlist[n]} {choice}" for n,choice in enumerate(choices)]
+        em.description = '\n\n' + '\n'.join(question_list)
+        sent_message = await ctx.send(embed=em)
+        for n in range(len(choices))
+            await sent_message.add_reaction(numlist[n])
+        await asyncio.sleep(60)
+        em.title = f"{question} (Results!)"
+        em.description = [f"{numlist[n]} {choice} - **{sent_message.reactions[n]} votes**" for n,choice in enumerate(choices)]
+        await ctx.send(embed=em)
+
 if __name__ == '__main__':
     RPSBot().run("MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs")
