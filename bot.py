@@ -75,7 +75,7 @@ class RPSBot(commands.Bot):
         question_list = [f"{numlist[n]} {choice}" for n,choice in enumerate(choices)]
         em.description = '\n\n' + '\n'.join(question_list)
         sent_message = await ctx.send(embed=em)
-        for n in range(len(choices))
+        for n in range(len(choices)):
             await sent_message.add_reaction(numlist[n])
         await asyncio.sleep(60)
         em.title = f"{question} (Results!)"
