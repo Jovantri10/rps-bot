@@ -20,6 +20,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     async def region(self, ctx, *, name):
+        '''Set your region!'''
         name = name.lower()
         regions = ['americas', 'europa', 'asia pacific', 'clear']
         if name not in regions:
@@ -29,11 +30,29 @@ class RPSBot(commands.Bot):
                 await ctx.author.remove_roles(role)
         if name == 'clear':
             return await ctx.send('Region cleared. 👍')
-        for role in ctx.guild.roles:
-            if role.name.lower() == name:
-                found_role = role
+        found_role = discord.utils.get(ctx.guild.roles, name=name.title())
         await ctx.author.add_roles(found_role)
         await ctx.send("Region set. 👍")
+
+    @commands.command()
+    @commands.has_permissions(manage_roles=True)
+    async def mute(self, ctx, member:discord.Member):
+        '''Mutes a user. What else did you think this did?!'''
+        muted = discord.utils.get(ctx.guild.roles, name='Muted')
+        if muted in member.roles:
+            return await ctx.send("I can't mute someone who's already been muted...")
+        await member.add_roles(muted)
+        await ctx.send(f"Muted {member}. 👍")
+
+    @commands.command()
+    @commands.has_permissions(manage_roles=True)
+    async def unmute(self, ctx, member:discord.Member):
+        '''Unmutes a user. He/she will finally be able to talk!'''
+        muted = discord.utils.get(ctx.guild.roles, name='Muted')
+        if muted not in member.roles:
+            return await ctx.send("I can't unmute someone who hasn't been muted yet...")
+        await member.remove_roles(muted)
+        await ctx.send(f"Unmuted {member}. 👍")
 
 if __name__ == '__main__':
     RPSBot().run("MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs")
