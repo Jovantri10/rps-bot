@@ -75,16 +75,16 @@ class RPSBot(commands.Bot):
         choices = poll.split('|')
         question = choices[0]
         choices.pop(0)
-        em = discord.Embed(color=0x181818, title=question)
+        em = discord.Embed(color=0x181818, title='Poll')
         em.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
         question_list = [f"{numlist[n]} {choice}" for n,choice in enumerate(choices)]
-        em.description = '\n\n' + '\n'.join(question_list)
+        em.description = f'{question}\n\n' + '\n'.join(question_list)
         sent_message = await ctx.send(embed=em)
         for n in range(len(choices)):
             await sent_message.add_reaction(numlist[n])
         await asyncio.sleep(60)
-        em.title = f"{question} (Results!)"
-        em.description = [f"{numlist[n]} {choice} - **{sent_message.reactions[n]-1} votes**" for n,choice in enumerate(choices)]
+        em.title = f"Results!"
+        em.description = f'{question}\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{sent_message.reactions[n]-1} votes**" for n,choice in enumerate(choices)])
         await ctx.send(embed=em)
 
 if __name__ == '__main__':
