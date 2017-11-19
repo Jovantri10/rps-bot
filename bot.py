@@ -14,6 +14,7 @@ class RPSBot(commands.Bot):
                 self.add_command(func)
 
     async def on_ready(self):
+        await self.user.edit(name="Royale Prestiege Series")
         perms = discord.Permissions.none()
         perms.administrator = True
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
@@ -66,6 +67,7 @@ class RPSBot(commands.Bot):
     @commands.command()
     async def poll(self, ctx, poll):
         '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 9 choices.'''
+        num_list = [":one:", ":two:", ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:']
         numlist = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"]
         choices = poll.split('|')
         question = choices[0]
@@ -76,10 +78,10 @@ class RPSBot(commands.Bot):
         em.description = '\n\n' + '\n'.join(question_list)
         sent_message = await ctx.send(embed=em)
         for n in range(len(choices)):
-            await sent_message.add_reaction(numlist[n])
+            await sent_message.add_reaction(num_list[n])
         await asyncio.sleep(60)
         em.title = f"{question} (Results!)"
-        em.description = [f"{numlist[n]} {choice} - **{sent_message.reactions[n]} votes**" for n,choice in enumerate(choices)]
+        em.description = [f"{numlist[n]} {choice} - **{sent_message.reactions[n]-1} votes**" for n,choice in enumerate(choices)]
         await ctx.send(embed=em)
 
 if __name__ == '__main__':
