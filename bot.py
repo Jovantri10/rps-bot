@@ -20,6 +20,16 @@ class RPSBot(commands.Bot):
         perms.administrator = True
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
 
+    async def on_member_join(member):
+        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello, {member.mention}! Do `!region` to select your region! Enjoy your stay here! 🎉🎊")
+
+    async def on_member_remove(member):
+        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Looks like {member.mention} is gonna miss out on all the fun. Bye 👋.")
+
+    async def on_command_error(ctx, error):
+        await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.command.signature}``", description=ctx.command.short_doc))
+        raise error
+
     @commands.command()
     async def region(self, ctx, *, name):
         '''Set your region!'''
