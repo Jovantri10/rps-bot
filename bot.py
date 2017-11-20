@@ -118,6 +118,35 @@ class RPSBot(commands.Bot):
         em.set_footer(text="Type !help command for more info on a command.")
         await ctx.send(embed=em)
 
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member:discord.Member, reason=None):
+        '''Kicks a member'''
+        try:
+            await ctx.guild.kick(member, reason)
+            await ctx.send("Done. 👍")
+        except discord.Forbidden:
+            return await ctx.send("I can't kick that member!")
+
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member:discord.Member, reason=None):
+        '''Bans a member'''
+        try:
+            await ctx.guild.ban(member, reason)
+            await ctx.send("Done. 👍")
+        except discord.Forbidden:
+            return await ctx.send("I can't ban that member!")
+
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, member:discord.Member, reason=None):
+        '''Unbans a member'''
+        try:
+            await ctx.guild.unban(member, reason)
+            await ctx.send("Done. 👍")
+        except discord.Forbidden:
+            return await ctx.send("I can't ban that member!")
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
