@@ -7,6 +7,7 @@ class RPSBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix="!")
         self.session = aiohttp.ClientSession(loop=self.loop)
+        self._last_result = None
 
     async def on_connect(self):
         for name, func in inspect.getmembers(self):
