@@ -21,10 +21,10 @@ class RPSBot(commands.Bot):
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
 
     async def on_member_join(self, member):
-        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello, {member.mention}! Do `!region` to select your region! Enjoy your stay here! 🎉🎊")
+        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
-        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Looks like {member.mention} is gonna miss out on all the fun. Bye 👋.")
+        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"{member.mention} just left Royale Prestige Series. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
         await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
@@ -99,6 +99,20 @@ class RPSBot(commands.Bot):
         reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1, reverse=True)
         em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
         await ctx.send(embed=em)
+
+    @command.command()
+    async def help(self, ctx, command=None):
+        if command:
+            command = discord.utils.get(self.commands, name=command.lower())
+            return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
+        em = discord.Embed(title='Help', color=0x181818)
+        em.set_author(name='Royale Prestiege Series', icon_url=self.user.avatar_url)
+        commands = []
+        for command in self.commands:
+            commands.append(f"``{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}``")
+        em.description = '\n'.join(commands)
+        await ctx.send(embed=em)
+
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
