@@ -101,8 +101,8 @@ class RPSBot(commands.Bot):
         em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
         await ctx.send(embed=em)
 
-    @command.command()
-    async def help(self, ctx, command=None):
+    @commands.command(name='help')
+    async def _help(self, ctx, command=None):
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
             return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
