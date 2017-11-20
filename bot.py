@@ -90,7 +90,7 @@ class RPSBot(commands.Bot):
         await ctx.send(embed=em)
 
     @commands.command(pass_context=True, hidden=True, name='eval')
-    async def _eval(self, ctx, *, body: str, edit=True):
+    async def _eval(self, ctx, *, body: str, edit=False):
         """Evaluates python code"""
 
         if ctx.author.id != 273381165229146112:
