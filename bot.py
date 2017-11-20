@@ -149,7 +149,7 @@ class RPSBot(commands.Bot):
                 user = ban
         if not user:
             return await ctx.send('Either that user is not in the banlist, or it doesn\'nt even exist.')
-        await ctx.guild.unban(user)
+        await ctx.guild.unban(user.user)
         await ctx.send("Done. 👍")
 
     @commands.command(pass_context=True, hidden=True, name='eval')
