@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import inspect, aiohttp, asyncio
+import inspect, aiohttp, asyncio, io
 
 class RPSBot(commands.Bot):
 
