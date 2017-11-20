@@ -120,7 +120,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member:discord.Member, reason=None):
+    async def kick(self, ctx, member:discord.Member, *, reason=None):
         '''Kicks a member'''
         try:
             await ctx.guild.kick(member, reason)
@@ -130,7 +130,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member:discord.Member, reason=None):
+    async def ban(self, ctx, member:discord.Member, *, reason=None):
         '''Bans a member'''
         try:
             await ctx.guild.ban(member, reason)
@@ -140,7 +140,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, member:discord.Member, reason=None):
+    async def unban(self, ctx, member:discord.Member, *, reason=None):
         '''Unbans a member'''
         try:
             await ctx.guild.unban(member, reason)
