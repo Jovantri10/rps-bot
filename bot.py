@@ -103,6 +103,7 @@ class RPSBot(commands.Bot):
 
     @commands.command(name='help')
     async def _help(self, ctx, command=None):
+        '''Shows this page'''
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
             return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
