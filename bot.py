@@ -140,7 +140,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, username):
+    async def unban(self, ctx, *, username):
         '''Unbans a member'''
         bans = await ctx.guild.bans()
         user = None
