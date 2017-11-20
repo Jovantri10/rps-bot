@@ -111,7 +111,7 @@ class RPSBot(commands.Bot):
         commands = []
         for command in self.commands:
             commands.append(f"``{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}``")
-        em.description = '\n'.join(commands)
+        em.description = '\n\n'.join(commands)
         em.set_footer(text="Type !help command for more info on a command.\nYou can also type !help category for more info on a category.")
         await ctx.send(embed=em)
 
