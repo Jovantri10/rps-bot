@@ -25,7 +25,7 @@ class RPSBot(commands.Bot):
         await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
-        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"{member.mention} just left Royale Prestige Series. Bye Felicia! 👋")
+        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
         await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
