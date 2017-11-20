@@ -120,30 +120,30 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member:discord.Member, *, reason=None):
+    async def kick(self, ctx, member:discord.Member):
         '''Kicks a member'''
         try:
-            await ctx.guild.kick(member, reason)
+            await ctx.guild.kick(member)
             await ctx.send("Done. 👍")
         except discord.Forbidden:
             return await ctx.send("I can't kick that member!")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member:discord.Member, *, reason=None):
+    async def ban(self, ctx, member:discord.Member):
         '''Bans a member'''
         try:
-            await ctx.guild.ban(member, reason)
+            await ctx.guild.ban(member)
             await ctx.send("Done. 👍")
         except discord.Forbidden:
             return await ctx.send("I can't ban that member!")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, member:discord.Member, *, reason=None):
+    async def unban(self, ctx, member:discord.Member):
         '''Unbans a member'''
         try:
-            await ctx.guild.unban(member, reason)
+            await ctx.guild.unban(member)
             await ctx.send("Done. 👍")
         except discord.Forbidden:
             return await ctx.send("I can't ban that member!")
