@@ -96,7 +96,7 @@ class RPSBot(commands.Bot):
             return
 
         env = {
-            'bot': self.bot,
+            'bot': self,
             'ctx': ctx,
             'channel': ctx.channel,
             'author': ctx.author,
@@ -130,8 +130,8 @@ class RPSBot(commands.Bot):
             err = await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
         else:
             value = stdout.getvalue()
-            if self.bot.token in value:
-                value = value.replace(self.bot.token, "[EXPUNGED]")
+            if "MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs" in value:
+                value = value.replace("MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs", "[EXPUNGED]")
             if ret is None:
                 if value:
                     try:
