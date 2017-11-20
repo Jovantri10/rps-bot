@@ -140,13 +140,17 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, member:discord.Member):
+    async def unban(self, ctx, username):
         '''Unbans a member'''
-        try:
-            await ctx.guild.unban(member)
-            await ctx.send("Done. 👍")
-        except discord.Forbidden:
-            return await ctx.send("I can't ban that member!")
+        bans = await ctx.guild.bans()
+        user = None
+        for ban in bans:
+            if username == ban.user.name:
+                user = ban
+        if not user:
+            return await ctx.send('Either that user is not in the banlist, or it doesn\'nt even exist.')
+        await ctx.guild.unban(user)
+        await ctx.send("Done. 👍")
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
