@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
-import inspect, aiohttp, asyncio, io, textwrap, traceback
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os
 
 class RPSBot(commands.Bot):
 
