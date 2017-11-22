@@ -5,7 +5,7 @@ import inspect, aiohttp, asyncio, io, textwrap, traceback, os
 
 class Cog:
     def __init__(self, bot):
-        pass
+        self.bot = bot
 
     def all_cogs(self):
         attrs = []
