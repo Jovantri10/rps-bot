@@ -17,7 +17,11 @@ class RPSBot(commands.Bot):
                 self.add_command(func)
         for cog in os.listdir('cogs'):
             if cog.endswith('.py'):
-                self.load_extension(f"cogs.{cog.replace('.py', '')}")
+                try:
+                    self.load_extension(f"cogs.{cog.replace('.py', '')}")
+                    print(f"Loaded extension: {cog.replace('.py', '')}")
+                except Exception as e:
+                    print(f"Nope. ERROR: {e}")
 
     async def on_ready(self):
         perms = discord.Permissions.none()
