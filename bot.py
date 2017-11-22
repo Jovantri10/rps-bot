@@ -17,7 +17,7 @@ class RPSBot(commands.Bot):
                 self.add_command(func)
         for cog in os.listdir('cogs'):
             if cog.endswith('.py'):
-                self.load_extension(f"cogs.{cog}")
+                self.load_extension(f"cogs.{cog.replace('.py', '')}")
 
     async def on_ready(self):
         perms = discord.Permissions.none()
@@ -87,7 +87,7 @@ class RPSBot(commands.Bot):
         em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         commands = []
         for command in self.commands:
-            if not command.cog_name and not command.hidden:
+            if command.cog_name = "RPSBot" and not command.hidden:
                 commands.append(f"{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}")
         em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(commands)+"\n```")
         em.set_footer(text="Type !help command for more info on a command.")
