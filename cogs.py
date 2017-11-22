@@ -7,9 +7,9 @@ class Cog:
     def __init__(self, bot):
         self.bot = bot
 
-    def all_cogs(self):
+    def all_cogs(clss):
         attrs = []
-        for name, attr in inspect.getmembers(self):
+        for name, attr in inspect.getmembers(clss):
             if inspect.isclass(attr):
                 attrs.append(attr)
         return attrsov

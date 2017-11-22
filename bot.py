@@ -29,7 +29,7 @@ class RPSBot(commands.Bot):
         for name, func in inspect.getmembers(self):
             if isinstance(func, commands.Command):
                 self.add_command(func)
-        for cog in Cog.all_cogs():
+        for cog in Cog.all_cogs(Cog):
             self.add_cog(cog(self))
 
     async def on_ready(self):
@@ -92,7 +92,7 @@ class RPSBot(commands.Bot):
     async def _help(self, ctx, command=None):
         '''Shows this page'''
         em = discord.Embed(title='Help', color=0x181818)
-        for cog in Cog.all_cogs():
+        for cog in Cog.all_cogs(Cog):
             em.add_field(name=str(cog), value="```\n"+'\n\n'.join([f"{ctx.prefix}{attr.name}{' '*(10-len(attr.name))}{attr.short_doc}" for name, attr in inspect.getmembers(cog) if isinstance(attr, commands.Command)])+'\n```')
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
