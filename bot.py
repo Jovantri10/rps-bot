@@ -104,17 +104,18 @@ class RPSBot(commands.Bot):
     @commands.command(name='help')
     async def _help(self, ctx, command=None):
         '''Shows this page'''
+        for cog in self.cogs:
+            em.add_field(name=str(cog), value="```\n"+'\n\n'.join([f"{ctx.prefix}{attr.name}{' '*(10-len(attr.name))}{attr.short_doc}" for name, attr in inspect.getmembers(cog) if isinstance(attr, commands.Command)])+'\n```')
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
             return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
         em = discord.Embed(title='Help', color=0x181818)
-        em.set_author(name='Royale Prestiege Series', icon_url=self.user.avatar_url)
+        em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         commands = []
         for command in self.commands:
-            if command.hidden:
-                continue
-            commands.append(f"``{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}``")
-        em.description = '\n\n'.join(commands)
+            if not command.cog and not command.hidden
+                commands.append(f"{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}")
+        em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(commands)+"\n```")
         em.set_footer(text="Type !help command for more info on a command.")
         await ctx.send(embed=em)
 
@@ -151,6 +152,15 @@ class RPSBot(commands.Bot):
             return await ctx.send('Either that user is not in the banlist, or it doesn\'nt even exist.')
         await ctx.guild.unban(user.user)
         await ctx.send("Done. 👍")
+
+    @commands.command(aliases=['si'])
+    async def serverinfo(self, ctx):
+        em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - server.created_at).days} days old. 👴")
+        em.set_thumbnail(url=ctx.guild.icon_url)
+        em.add_field(name='Members Online', value=f"{len([member for member in ctx.guild.members if member.status != discord.Status.offline])}/{len(ctx.guild.members)}")
+        em.add_field(name='Owner', value=ctx.guild.owner.mention)
+        em.add_field(name='Text-Voice Channels', value=f"{len(ctx.guild.text_channels)}-{len(ctx.guild.voice_channels)}")
+        em.add_field(name="Region", value=ctx.guild.region)
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
