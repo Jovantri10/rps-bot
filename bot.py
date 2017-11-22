@@ -87,7 +87,7 @@ class RPSBot(commands.Bot):
         em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         commands = []
         for command in self.commands:
-            if not command.cog and not command.hidden:
+            if not command.cog_name and not command.hidden:
                 commands.append(f"{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}")
         em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(commands)+"\n```")
         em.set_footer(text="Type !help command for more info on a command.")
