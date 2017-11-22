@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os
+from cogs import Cog
 
 class RPSBot(commands.Bot):
 
@@ -28,13 +29,8 @@ class RPSBot(commands.Bot):
         for name, func in inspect.getmembers(self):
             if isinstance(func, commands.Command):
                 self.add_command(func)
-        for cog in os.listdir('cogs'):
-            if cog.endswith('.py'):
-                try:
-                    self.load_extension(f"cogs.{cog.replace('.py', '')}")
-                    print(f"Loaded extension: {cog.replace('.py', '')}")
-                except Exception as e:
-                    print(f"Nope. ERROR: {e}")
+        for cog in Cog.all_cogs:
+            self.add_cog(cog(self))
 
     async def on_ready(self):
         perms = discord.Permissions.none()
@@ -96,7 +92,7 @@ class RPSBot(commands.Bot):
     async def _help(self, ctx, command=None):
         '''Shows this page'''
         em = discord.Embed(title='Help', color=0x181818)
-        for cog in self.cogs:
+        for cog in Cog.all_cogs():
             em.add_field(name=str(cog), value="```\n"+'\n\n'.join([f"{ctx.prefix}{attr.name}{' '*(10-len(attr.name))}{attr.short_doc}" for name, attr in inspect.getmembers(cog) if isinstance(attr, commands.Command)])+'\n```')
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
