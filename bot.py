@@ -29,7 +29,7 @@ class RPSBot(commands.Bot):
         for name, func in inspect.getmembers(self):
             if isinstance(func, commands.Command):
                 self.add_command(func)
-        for cog in Cog.all_cogs:
+        for cog in Cog.all_cogs():
             self.add_cog(cog(self))
 
     async def on_ready(self):
