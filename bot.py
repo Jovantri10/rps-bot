@@ -15,6 +15,9 @@ class RPSBot(commands.Bot):
         for name, func in inspect.getmembers(self):
             if isinstance(func, commands.Command):
                 self.add_command(func)
+        for cog in os.listdir('cogs'):
+            if cog.endswith('.py'):
+                self.load_extension(f"cogs.{cog}")
 
     async def on_ready(self):
         perms = discord.Permissions.none()
@@ -46,35 +49,6 @@ class RPSBot(commands.Bot):
         found_role = discord.utils.get(ctx.guild.roles, name=name.title())
         await ctx.author.add_roles(found_role)
         await ctx.send("Region set. 👍")
-
-    @commands.command()
-    @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, member:discord.Member):
-        '''Mutes a user. What else did you think this did?!'''
-        muted = discord.utils.get(ctx.guild.roles, name='Muted')
-        if muted in member.roles:
-            return await ctx.send("I can't mute someone who's already been muted...")
-        await member.add_roles(muted)
-        await ctx.send(f"Muted {member}. 👍")
-
-    @commands.command()
-    @commands.has_permissions(manage_roles=True)
-    async def unmute(self, ctx, member:discord.Member):
-        '''Unmutes a user. He/she will finally be able to talk!'''
-        muted = discord.utils.get(ctx.guild.roles, name='Muted')
-        if muted not in member.roles:
-            return await ctx.send("I can't unmute someone who hasn't been muted yet...")
-        await member.remove_roles(muted)
-        await ctx.send(f"Unmuted {member}. 👍")
-
-    @commands.command(aliases=['clear'])
-    @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, messages: int):
-        '''Purge messages! This command isn't as crappy as the movie though.'''
-        await ctx.message.delete()
-        async for message in ctx.channel.history(limit=messages):
-            await message.delete()
-        await ctx.send(f"Deleted {messages} messages. 👍")
 
     @commands.command()
     async def poll(self, ctx, *, poll):
@@ -119,40 +93,6 @@ class RPSBot(commands.Bot):
         em.set_footer(text="Type !help command for more info on a command.")
         await ctx.send(embed=em)
 
-    @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member:discord.Member):
-        '''Kicks a member'''
-        try:
-            await ctx.guild.kick(member)
-            await ctx.send("Done. 👍")
-        except discord.Forbidden:
-            return await ctx.send("I can't kick that member!")
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member:discord.Member):
-        '''Bans a member'''
-        try:
-            await ctx.guild.ban(member)
-            await ctx.send("Done. 👍")
-        except discord.Forbidden:
-            return await ctx.send("I can't ban that member!")
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, *, username):
-        '''Unbans a member'''
-        bans = await ctx.guild.bans()
-        user = None
-        for ban in bans:
-            if username == ban.user.name:
-                user = ban
-        if not user:
-            return await ctx.send('Either that user is not in the banlist, or it doesn\'nt even exist.')
-        await ctx.guild.unban(user.user)
-        await ctx.send("Done. 👍")
-
     @commands.command(aliases=['si'])
     async def serverinfo(self, ctx):
         em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - server.created_at).days} days old. 👴")
@@ -161,6 +101,7 @@ class RPSBot(commands.Bot):
         em.add_field(name='Owner', value=ctx.guild.owner.mention)
         em.add_field(name='Text-Voice Channels', value=f"{len(ctx.guild.text_channels)}-{len(ctx.guild.voice_channels)}")
         em.add_field(name="Region", value=ctx.guild.region)
+        await ctx.send(em)
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
