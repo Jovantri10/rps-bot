@@ -89,11 +89,11 @@ class RPSBot(commands.Bot):
             command = discord.utils.get(self.commands, name=command.lower())
             return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
         em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
-        commands = []
+        comms = []
         for command in self.commands:
             if command.cog_name == "RPSBot" and not command.hidden:
-                commands.append(f"{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}")
-        em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(commands)+"\n```")
+                comms.append(f"{ctx.prefix}{command.name}{' '*(10-len(command.name))}{command.short_doc}")
+        em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(comms)+"\n```")
         em.set_footer(text="Type !help command for more info on a command.")
         await ctx.send(embed=em)
 
