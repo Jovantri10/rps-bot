@@ -12,7 +12,7 @@ class Cog:
         for name, attr in inspect.getmembers(clss):
             if inspect.isclass(attr):
                 attrs.append(attr)
-        return attrsov
+        return attrs
 
     class Moderator:
         def __init__(self, bot):
