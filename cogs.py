@@ -11,7 +11,8 @@ class Cog:
         attrs = []
         for name, attr in inspect.getmembers(clss):
             if inspect.isclass(attr):
-                attrs.append(attr)
+                if attr.__name__ != "type":
+                    attrs.append(attr)
         return attrs
 
     class Moderator:
