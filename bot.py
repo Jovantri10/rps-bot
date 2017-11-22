@@ -10,6 +10,19 @@ class RPSBot(commands.Bot):
         self.session = aiohttp.ClientSession(loop=self.loop)
         self._last_result = None
 
+    def paginate(self, text: str):
+        '''Simple generator that paginates text.'''
+        last = 0
+        pages = []
+        for curr in range(0, len(text)):
+            if curr % 1980 == 0:
+                pages.append(text[last:curr])
+                last = curr
+                appd_index = curr
+        if appd_index != len(text)-1:
+            pages.append(text[last:curr])
+        return list(filter(lambda a: a != '', pages))
+
     async def on_connect(self):
         self.remove_command('help')
         for name, func in inspect.getmembers(self):
@@ -156,7 +169,7 @@ class RPSBot(commands.Bot):
                     try:
                         out = await ctx.send(f'```py\n{value}\n```')
                     except:
-                        paginated_text = ctx.paginate(value)
+                        paginated_text = self.paginate(value)
                         for page in paginated_text:
                             if page == paginated_text[-1]:
                                 out = await ctx.send(f'```py\n{page}\n```')
@@ -167,10 +180,10 @@ class RPSBot(commands.Bot):
                 try:
                     out = await ctx.send(f'```py\n{value}{ret}\n```')
                 except:
-                    paginated_text = ctx.paginate(f"{value}{ret}")
+                    paginated_text = self.paginate(f"{value}{ret}")
                     for page in paginated_text:
                         if page == paginated_text[-1]:
-                            out = await ctx.send(f'```py\n{page}\n```')
+                            out = await self.send(f'```py\n{page}\n```')
                             break
                         await ctx.send(f'```py\n{page}\n```')
 
