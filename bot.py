@@ -108,7 +108,7 @@ class RPSBot(commands.Bot):
 
     @commands.command(aliases=['si'])
     async def serverinfo(self, ctx):
-        em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - server.created_at).days} days old. 👴")
+        em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - ctx.guild.created_at).days} days old. 👴")
         em.set_thumbnail(url=ctx.guild.icon_url)
         em.add_field(name='Members Online', value=f"{len([member for member in ctx.guild.members if member.status != discord.Status.offline])}/{len(ctx.guild.members)}")
         em.add_field(name='Owner', value=ctx.guild.owner.mention)
