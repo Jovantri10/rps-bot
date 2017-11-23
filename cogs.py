@@ -88,7 +88,6 @@ class Cog:
 
         def __init__(self, bot):
             self.bot = bot
-            self.ytclient = YoutubeAPI("AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0")
 
         async def get_results(self, video):
             async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}):
