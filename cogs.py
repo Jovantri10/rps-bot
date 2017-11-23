@@ -96,7 +96,7 @@ class Cog:
             video_list = [search for search in search_list if search["id"]["kind"] == "youtube#video"]
             if video_list == []:
                 return [False, False]
-            return [f"https://youtube.com/watch?v={video_list[0]['id']['videoId']}", search["snippet"]["title"]]
+            return [f"https://youtube.com/watch?v={video_list[0]['id']['videoId']}", video_list[0]["snippet"]["title"]]
 
         async def get_name_from_vid(self, video):
             vid_id = video.split("v=")[1]
