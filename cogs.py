@@ -90,7 +90,7 @@ class Cog:
             self.bot = bot
 
         async def get_results(self, video):
-            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}):
+            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}) as resp:
                 data = await resp.json()
                 search_list = data['items']
             video_list = [search for search in search_list if search["id"]["kind"] == "youtube#video"]
@@ -100,7 +100,7 @@ class Cog:
 
         async def get_name_from_vid(self, video):
             vid_id = video.split("v=")[1]
-            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/video", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "id": vid_id}):
+            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/video", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "id": vid_id}) as resp:
                 data = await resp.json()
                 vid = data['items']
             if vid == []:
