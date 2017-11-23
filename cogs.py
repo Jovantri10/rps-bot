@@ -116,7 +116,7 @@ class Cog:
                 pass
 
             def error(self, msg):
-                await ctx.send(f"Error in downloading video: {msg}")
+                print(msg)
             
 
         @commands.command()
