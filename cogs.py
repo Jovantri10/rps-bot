@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
+import youtube_dl
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os
 
 class Cog:
@@ -19,9 +20,6 @@ class Cog:
         def __init__(self, bot):
             self.bot = bot
             self.session = bot.session
-
-        def __str__(self):
-            return "Moderator"
 
         @commands.command()
         @commands.has_permissions(kick_members=True)
@@ -85,3 +83,72 @@ class Cog:
                 return await ctx.send("I can't mute someone who's already been muted...")
             await member.add_roles(muted)
             await ctx.send(f"Muted {member}. 👍")
+
+    class Music:
+
+        def __init__(self, bot):
+            self.bot = bot
+            self.ytclient = YoutubeAPI("AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0")
+
+        async def get_results(self, video):
+            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}):
+                data = await resp.json()
+                search_list = data['items']
+            video_list = [search for search in search_list if search["id"]["kind"] == "youtube#video"]
+            if video_list == []:
+                return [False, False]
+            return [f"https://youtube.com/watch?v={video_list[0]['id']['videoId']}", search["snippet"]["title"]]
+
+        async def get_name_from_vid(self, video):
+            vid_id = video.split("v=")[1]
+            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/video", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "id": vid_id}):
+                data = await resp.json()
+                vid = data['items']
+            if vid == []:
+                return False
+            return vid['items']['snippet']['title']
+
+        class Logger():
+            def debug(self, msg):
+                pass
+
+            def warning(self, msg):
+                pass
+
+            def error(self, msg):
+                await ctx.send(f"Error in downloading video: {msg}")
+            
+
+        @commands.command()
+        async def play(self, ctx, *, video):
+            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
+                url = video
+                name = await self.get_name_from_vid(video)
+                if not name:
+                    return await ctx.send("That's not a valid url!")
+            else:
+                url, name = await self.get_results(video)
+                if not url[0]:
+                    return await ctx.send("There aren't any search results!")
+
+            ydl_opts = {
+                'format': 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+                'logger': self.Logger()
+            }
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+
+            vc = await ctx.guild.get_channel(371289859127771146).connect()
+            vc.play(discord.FFmpegPCMAudio(f'{name}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
+            await ctx.send(f"Playing {name}")
+
+
+
+
+
+
