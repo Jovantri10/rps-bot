@@ -94,7 +94,7 @@ class Cog:
         @commands.has_permissions(manage_roles=True)
         async def removerole(self, ctx, member: discord.Member, *, rolenames):
             """Removes roles from a member. I wonder what he/she did to deserve this."""
-            rolenames_ls = role.lower().replace("apac", "asia pacific").split(",")
+            rolenames_ls = rolenames.lower().replace("apac", "asia pacific").split(",")
             rolenames_ls = [r.strip() for r in rolenames_ls]
             roles = [discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles) for role in rolenames_ls]
             if None in roles:
@@ -108,7 +108,7 @@ class Cog:
         @commands.has_permissions(manage_roles=True)
         async def addrole(self, ctx, member: discord.Member, *, rolenames):
             """Adds roles to a member. Hence the name addrole."""
-            rolenames_ls = role.lower().replace("apac", "asia pacific").split(",")
+            rolenames_ls = rolenames.lower().replace("apac", "asia pacific").split(",")
             rolenames_ls = [r.strip() for r in rolenames_ls]
             roles = [discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles) for role in rolenames_ls]
             if None in roles:
