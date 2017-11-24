@@ -118,7 +118,7 @@ class RPSBot(commands.Bot):
         em.add_field(name='Owner', value=ctx.guild.owner.mention)
         em.add_field(name='Text-Voice Channels', value=f"{len(ctx.guild.text_channels)}-{len(ctx.guild.voice_channels)}")
         em.add_field(name="Region", value=ctx.guild.region)
-        await ctx.send(em)
+        await ctx.send(embed=em)
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
