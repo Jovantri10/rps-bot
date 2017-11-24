@@ -57,6 +57,8 @@ class RPSBot(commands.Bot):
             name = 'asia pacific'
         if name == 'europe':
             name = 'europa'
+        if name == 'america':
+            name = 'americas'
         if name not in regions:
             return await ctx.send("The available regions are: `Americas`, `Europa`, and `Asia Pacific`. You could also use `clear` to clear your region setting.")
         for role in ctx.author.roles:
