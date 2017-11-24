@@ -112,8 +112,10 @@ class RPSBot(commands.Bot):
     @commands.command(aliases=['si'])
     @commands.guild_only()
     async def serverinfo(self, ctx):
+        """Returns a server's info."""
         em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - ctx.guild.created_at).days} days old. 👴")
         em.set_thumbnail(url=ctx.guild.icon_url)
+        em.add_field(name="ID", value=str(ctx.guild.id))
         em.add_field(name='Members Online', value=f"{len([member for member in ctx.guild.members if member.status != discord.Status.offline])}/{len(ctx.guild.members)}")
         em.add_field(name='Owner', value=ctx.guild.owner.mention)
         em.add_field(name='Text-Voice Channels', value=f"{len(ctx.guild.text_channels)}-{len(ctx.guild.voice_channels)}")
@@ -124,6 +126,43 @@ class RPSBot(commands.Bot):
         em.add_field(name="Bans", value=str(len(bans)))
 
         await ctx.send(embed=em)
+
+    @commands.command(aliases=["ri"])
+    @commands.guild_only()
+    async def roleinfo(self, ctx, *, rolename):
+        """Returns a role's info."""
+        rolename = rolename.lower().replace("apac", "asia pacific")
+        role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+        if not role:
+            return await ctx.send("That role does not exist!")
+        if role.is_default():
+            return await ctx.send("I think you know very well what this role is...")
+        em = discord.Embed(color=role.color, title=role.name, description=f"This role has been here since {role.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this role is {(ctx.message.created_at - role.created_at).days} days old. 👴")
+        em.add_field(name="ID", value=str(role.id))
+        em.add_field(name="Members", value=str(len(role.members)))
+        em.add_field(name="Mentionable", value="Yes" if role.mentionable else "No")
+        em.add_field(name="Displayed Separately", value="Yes" if role.hoist else "No")
+        em.add_field(name="Position", value=str(role.position))
+        await ctx.send(embed=em)
+
+    @commands.command()
+    @commands.guild_only()
+    async def rolemembers(self, ctx, *, rolename):
+        rolename = rolename.lower().replace("apac", "asia pacific")
+        role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+        if not role:
+            return await ctx.send("That role does not exist!")
+        if role.is_default():
+            return await ctx.send("I think you know very well who has this role...")
+        member_str = ""
+        for n, member in enumerate(role.members):
+            member_str += member.mention
+            if n % 2 == 0:
+                member_str += "\n"
+        await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
+
+        
+        
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
