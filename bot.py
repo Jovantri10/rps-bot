@@ -152,8 +152,9 @@ class RPSBot(commands.Bot):
     @commands.command()
     @commands.guild_only()
     async def rolemembers(self, ctx, *, rolename):
+        """Shows all the members that have this role."""
         rolename = rolename.lower().replace("apac", "asia pacific")
-        role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+        role = discord.utils.find(lambda r: r.name.lower() == rolename, ctx.guild.roles)
         if not role:
             return await ctx.send("That role does not exist!")
         if role.is_default():
@@ -164,6 +165,13 @@ class RPSBot(commands.Bot):
             if n % 2 == 0:
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
+
+    @commands.command()
+    @commands.guild_only()
+    async def discord(self, ctx):
+        invites = await ctx.guild.invites()
+        invites = [invite for invite in invites if invite.max_age == 0 and invite.max_uses == 0]
+        await ctx.send(f"**Server invite:** {invites[0].code}")
 
         
         
