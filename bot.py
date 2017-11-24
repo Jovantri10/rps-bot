@@ -171,7 +171,7 @@ class RPSBot(commands.Bot):
     async def discord(self, ctx):
         invites = await ctx.guild.invites()
         invites = [invite for invite in invites if invite.max_age == 0 and invite.max_uses == 0]
-        await ctx.send(f"**Server invite:** {invites[0].code}")
+        await ctx.send(f"**Server invite:** https://discord.gg/{invites[0].code}")
 
         
         
