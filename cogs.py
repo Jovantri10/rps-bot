@@ -93,6 +93,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def removerole(self, ctx, member: discord.Member, *, role):
+            """Removes a role from a member. I wonder what he/she did to deserve this."""
             role = role.lower().replace("apac", "asia pacific")
             role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
             if not role:
@@ -104,6 +105,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def addrole(self, ctx, member: discord.Member, *, role):
+            """Adds a role to a member. Hence the name addrole."""
             role = role.lower().replace("apac", "asia pacific")
             role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
             if not role:
@@ -148,6 +150,7 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         async def play(self, ctx, *, video):
+            """Doesn't work until we get a VPS"""
             if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
                 url = video
                 name = await self.get_name_from_vid(video)
