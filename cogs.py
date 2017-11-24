@@ -22,6 +22,7 @@ class Cog:
             self.session = bot.session
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(kick_members=True)
         async def kick(self, ctx, member:discord.Member):
             '''Kicks a member'''
@@ -32,6 +33,7 @@ class Cog:
                 return await ctx.send("I can't kick that member!")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(ban_members=True)
         async def ban(self, ctx, member:discord.Member):
             '''Bans a member'''
@@ -42,6 +44,7 @@ class Cog:
                 return await ctx.send("I can't ban that member!")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(ban_members=True)
         async def unban(self, ctx, *, username):
             '''Unbans a member'''
@@ -65,6 +68,7 @@ class Cog:
             await ctx.send(f"Deleted {messages} messages. 👍")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(mute_members=True)
         async def unmute(self, ctx, member:discord.Member):
             '''Unmutes a user. He/she will finally be able to talk!'''
@@ -75,6 +79,7 @@ class Cog:
             await ctx.send(f"Unmuted {member}. 👍")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(mute_members=True)
         async def mute(self, ctx, member:discord.Member):
             '''Mutes a user. What else did you think this did?!'''
@@ -85,6 +90,7 @@ class Cog:
             await ctx.send(f"Muted {member}. 👍")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def removerole(self, ctx, member: discord.Member, *, role):
             role = role.lower()
@@ -97,6 +103,7 @@ class Cog:
             await ctx.send(f"**{role.name}** removed from **{member.name}**")
 
         @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def addrole(self, ctx, member: discord.Member, *, role):
             role = role.lower()
@@ -143,6 +150,7 @@ class Cog:
             
 
         @commands.command()
+        @commands.guild_only()
         async def play(self, ctx, *, video):
             if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
                 url = video

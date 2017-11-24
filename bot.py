@@ -48,6 +48,7 @@ class RPSBot(commands.Bot):
         raise error
 
     @commands.command()
+    @commands.guild_only()
     async def region(self, ctx, *, name):
         '''Set your region!'''
         name = name.lower()
@@ -107,6 +108,7 @@ class RPSBot(commands.Bot):
         await ctx.send(embed=em)
 
     @commands.command(aliases=['si'])
+    @commands.guild_only()
     async def serverinfo(self, ctx):
         em = discord.Embed(color=0x181818, title=ctx.guild.name, description=f"This server has been here since {ctx.guild.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this server is {(ctx.message.created_at - ctx.guild.created_at).days} days old. 👴")
         em.set_thumbnail(url=ctx.guild.icon_url)
