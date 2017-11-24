@@ -166,7 +166,7 @@ class RPSBot(commands.Bot):
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
 
-    @commands.command()
+    @commands.command(aliases=['invite'])
     @commands.guild_only()
     async def discord(self, ctx):
         invites = await ctx.guild.invites()
