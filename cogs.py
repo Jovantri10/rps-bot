@@ -128,7 +128,7 @@ class Cog:
             else:
                 url, name = await self.get_results(video)
                 if not url:
-                    return await ctx.send("There aren't any search results!")
+                    return await ctx.send("There aren't any search results.")
 
             ydl_opts = {
                 'format': 'bestaudio/best',
