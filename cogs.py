@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes
 
 class Cog:
     def __init__(self, bot):
@@ -142,7 +142,7 @@ class Cog:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
-            discord.opus.load_opus("opus")
+            discord.opus.load_opus(ctypes.find_library("opus"))
             vc = await ctx.guild.get_channel(371289859127771146).connect()
             vc.play(discord.FFmpegPCMAudio(f'{name}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
             await ctx.send(f"Playing {name}")
