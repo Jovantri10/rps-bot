@@ -127,7 +127,7 @@ class Cog:
                     return await ctx.send("That's not a valid url!")
             else:
                 url, name = await self.get_results(video)
-                if not url[0]:
+                if not url:
                     return await ctx.send("There aren't any search results!")
 
             ydl_opts = {
