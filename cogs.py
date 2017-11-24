@@ -65,7 +65,7 @@ class Cog:
             await ctx.send(f"Deleted {messages} messages. 👍")
 
         @commands.command()
-        @commands.has_permissions(manage_roles=True)
+        @commands.has_permissions(mute_members=True)
         async def unmute(self, ctx, member:discord.Member):
             '''Unmutes a user. He/she will finally be able to talk!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
@@ -75,7 +75,7 @@ class Cog:
             await ctx.send(f"Unmuted {member}. 👍")
 
         @commands.command()
-        @commands.has_permissions(manage_roles=True)
+        @commands.has_permissions(mute_members=True)
         async def mute(self, ctx, member:discord.Member):
             '''Mutes a user. What else did you think this did?!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
@@ -83,6 +83,30 @@ class Cog:
                 return await ctx.send("I can't mute someone who's already been muted...")
             await member.add_roles(muted)
             await ctx.send(f"Muted {member}. 👍")
+
+        @commands.command()
+        @commands.has_permissions(manage_roles=True)
+        async def removerole(self, ctx, member: discord.Member, *, role):
+            role = role.lower()
+            if role == "apac":
+                role = "asia pacific"
+            role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+            if not role:
+                return await ctx.send("That role does not exist!")
+            await member.remove_roles(role)
+            await ctx.send(f"**{role.name}** removed from **{member.name}**")
+
+        @commands.command()
+        @commands.has_permissions(manage_roles=True)
+        async def addrole(self, ctx, member: discord.Member, *, role):
+            role = role.lower()
+            if role == "apac":
+                role = "asia pacific"
+            role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+            if not role:
+                return await ctx.send("That role does not exist!")
+            await member.add_roles(role)
+            await ctx.send(f"**{role.name}** added to **{member.name}**")
 
     class Music:
 
@@ -142,9 +166,9 @@ class Cog:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
-            discord.opus.load_opus(ctypes.util.find_library("opus"))
+            discord.opus.load_opus(ctypes.util.find_library('opus'))
             vc = await ctx.guild.get_channel(371289859127771146).connect()
-            vc.play(discord.FFmpegPCMAudio(f'{name}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
+            vc.play(discord.FFmpegPCMAudio(f'{name}-{url.split("v=")[1]}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
             await ctx.send(f"Playing {name}")
 
 
