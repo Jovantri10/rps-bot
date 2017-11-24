@@ -142,6 +142,7 @@ class Cog:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
+            discord.opus.load_opus("libopus-0.x64.dll")
             vc = await ctx.guild.get_channel(371289859127771146).connect()
             vc.play(discord.FFmpegPCMAudio(f'{name}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
             await ctx.send(f"Playing {name}")
