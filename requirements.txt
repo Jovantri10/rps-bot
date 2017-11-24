@@ -1,2 +1,3 @@
 git+http://github.com/Rapptz/discord.py@rewrite
 youtube-dl
+pynacl
