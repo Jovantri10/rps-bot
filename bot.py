@@ -136,7 +136,7 @@ class RPSBot(commands.Bot):
     async def roleinfo(self, ctx, *, rolename):
         """Returns a role's info."""
         rolename = rolename.lower().replace("apac", "asia pacific")
-        role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
+        role = discord.utils.find(lambda r: r.name.lower() == rolename, ctx.guild.roles)
         if not role:
             return await ctx.send("That role does not exist!")
         if role.is_default():
