@@ -161,7 +161,7 @@ class RPSBot(commands.Bot):
             return await ctx.send("I think you know very well who has this role...")
         member_str = ""
         for n, member in enumerate(role.members):
-            member_str += member.mention
+            member_str += " " + member.mention
             if n % 2 == 0:
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
