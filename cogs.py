@@ -93,9 +93,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def removerole(self, ctx, member: discord.Member, *, role):
-            role = role.lower()
-            if role == "apac":
-                role = "asia pacific"
+            role = role.lower().replace("apac", "asia pacific")
             role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
             if not role:
                 return await ctx.send("That role does not exist!")
@@ -106,9 +104,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
         async def addrole(self, ctx, member: discord.Member, *, role):
-            role = role.lower()
-            if role == "apac":
-                role = "asia pacific"
+            role = role.lower().replace("apac", "asia pacific")
             role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
             if not role:
                 return await ctx.send("That role does not exist!")
