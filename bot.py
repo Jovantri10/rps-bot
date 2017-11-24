@@ -118,6 +118,11 @@ class RPSBot(commands.Bot):
         em.add_field(name='Owner', value=ctx.guild.owner.mention)
         em.add_field(name='Text-Voice Channels', value=f"{len(ctx.guild.text_channels)}-{len(ctx.guild.voice_channels)}")
         em.add_field(name="Region", value=ctx.guild.region)
+        em.add_field(name="Emojis", value=f"{len(ctx.guild.emojis)}/50")
+        em.add_field(name="Roles", value=str(len(ctx.guild.roles)))
+        bans = await ctx.guild.bans()
+        em.add_field(name="Bans", value=str(len(bans)))
+
         await ctx.send(embed=em)
 
     @commands.command(pass_context=True, hidden=True, name='eval')
