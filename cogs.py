@@ -92,26 +92,30 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
-        async def removerole(self, ctx, member: discord.Member, *, role):
-            """Removes a role from a member. I wonder what he/she did to deserve this."""
-            role = role.lower().replace("apac", "asia pacific")
-            role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
-            if not role:
-                return await ctx.send("That role does not exist!")
-            await member.remove_roles(role)
-            await ctx.send(f"**{role.name}** removed from **{member.name}**")
+        async def removerole(self, ctx, member: discord.Member, *, rolenames):
+            """Removes roles from a member. I wonder what he/she did to deserve this."""
+            rolenames_ls = role.lower().replace("apac", "asia pacific").split(",")
+            rolenames_ls = [r.strip() for r in rolenames_ls]
+            roles = [discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles) for role in rolenames_ls]
+            if None in roles:
+                return await ctx.send("One of those roles does not exist!")
+            for role in roles:
+                await member.remove_roles(role)
+            await ctx.send(f"{', '.join([f'**{r.name}**' for r in roles])} removed from **{member.name}**")
 
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(manage_roles=True)
-        async def addrole(self, ctx, member: discord.Member, *, role):
-            """Adds a role to a member. Hence the name addrole."""
-            role = role.lower().replace("apac", "asia pacific")
-            role = discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles)
-            if not role:
-                return await ctx.send("That role does not exist!")
-            await member.add_roles(role)
-            await ctx.send(f"**{role.name}** added to **{member.name}**")
+        async def addrole(self, ctx, member: discord.Member, *, rolenames):
+            """Adds roles to a member. Hence the name addrole."""
+            rolenames_ls = role.lower().replace("apac", "asia pacific").split(",")
+            rolenames_ls = [r.strip() for r in rolenames_ls]
+            roles = [discord.utils.find(lambda r: r.name.lower() == role, ctx.guild.roles) for role in rolenames_ls]
+            if None in roles:
+                return await ctx.send("One of those roles does not exist!")
+            for role in roles:
+                await member.add_roles(role)
+            await ctx.send(f"{', '.join([f'**{r.name}**' for r in roles])} added to **{member.name}**")
 
     class Music:
 
