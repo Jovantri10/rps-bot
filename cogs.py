@@ -167,7 +167,8 @@ class Cog:
 
             name_file = []
             for word in name.split(" "):
-                name_file.append("".join(ch for ch in word if ch.isalnum()))
+                if "".join(ch for ch in word if ch.isalnum()) != "":
+                    name_file.append("".join(ch for ch in word if ch.isalnum()))
 
             if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
                 ydl_opts = {
