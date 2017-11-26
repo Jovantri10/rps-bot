@@ -165,7 +165,7 @@ class Cog:
                 if not url:
                     return await ctx.send("There aren't any search results.")
 
-            if != f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3' in os.listdir('.'):
+            if f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
                 ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
