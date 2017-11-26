@@ -165,7 +165,7 @@ class Cog:
                 if not url:
                     return await ctx.send("There aren't any search results.")
 
-            if f'{''.join(ch for ch in name if ch.isalnum()).replace(" ", "_")}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
+            if f'{"".join(ch for ch in name if ch.isalnum()).replace(" ", "_")}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
                 ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
@@ -180,7 +180,7 @@ class Cog:
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             vc = await ctx.guild.get_channel(371289859127771146).connect()
-            vc.play(discord.FFmpegPCMAudio(f'{''.join(ch for ch in name if ch.isalnum()).replace(" ", "_")}-{url.split("v=")[1]}.mp3'))
+            vc.play(discord.FFmpegPCMAudio(f'{"".join(ch for ch in name if ch.isalnum()).replace(" ", "_")}-{url.split("v=")[1]}.mp3'))
             await ctx.send(f"Playing {name}")
 
 
