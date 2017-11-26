@@ -165,21 +165,22 @@ class Cog:
                 if not url:
                     return await ctx.send("There aren't any search results.")
 
-            ydl_opts = {
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'logger': self.Logger()
-            }
-            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([url])
+            if != f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3' in os.listdir('.'):
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                    'logger': self.Logger()
+                }
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             vc = await ctx.guild.get_channel(371289859127771146).connect()
-            vc.play(discord.FFmpegPCMAudio(f'{name}-{url.split("v=")[1]}.mp3'), after=lambda a: os.remove(f'{name}.mp3'))
+            vc.play(discord.FFmpegPCMAudio(f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3')))
             await ctx.send(f"Playing {name}")
 
 
