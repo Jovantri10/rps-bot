@@ -180,7 +180,7 @@ class Cog:
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             vc = await ctx.guild.get_channel(371289859127771146).connect()
-            vc.play(discord.FFmpegPCMAudio(f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3')))
+            vc.play(discord.FFmpegPCMAudio(f'{name.replace(" ", "_")}-{url.split("v=")[1]}.mp3'))
             await ctx.send(f"Playing {name}")
 
 
