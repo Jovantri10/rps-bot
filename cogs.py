@@ -184,12 +184,8 @@ class Cog:
                     ydl.download([url])
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
-            try:
-                await ctx.guild.get_channel(371289859127771146).disconnect()
-            except:
-                pass
             vc = await ctx.guild.get_channel(371289859127771146).connect()
-            vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
+            vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'), after=lambda e: await vc.disconnect())
             await ctx.send(f"Playing {name}")
 
 
