@@ -157,7 +157,10 @@ class Cog:
             """Have the bot join the music channel."""
             if self.vc:
                 return await ctx.send("Already joined a voice channel!")
-            self.vc = await ctx.author.voice.channel.connect()
+            try:
+                self.vc = await ctx.author.voice.channel.connect()
+            except:
+                return await ctx.send("You're not in a voice channel!")
             await ctx.send("Joined the music channel.")
 
         @commands.command()
