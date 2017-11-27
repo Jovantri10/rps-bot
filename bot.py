@@ -70,12 +70,12 @@ class RPSBot(commands.Bot):
         await ctx.author.add_roles(found_role)
         await ctx.send("Region set. 👍")
 
-    @commands.command()
+    @commands.command(aliases=["ui"])
     async def userinfo(self, ctx, user:discord.Member=None):
         if not user:
             user = ctx.author
         em = discord.Embed(title=str(user), description=f"This user joined Discord since {user.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this account is {(ctx.message.created_at - user.created_at).days} days old. 👴", color=0x181818)
-        em.set_thumbnail(user.avatar_url)
+        em.set_thumbnail(url=user.avatar_url)
         em.add_field(name="Nickname", value=user.nick)
         em.add_field(name="Joined At", value=user.joined_at.strftime('%b %d, %Y %H:%M:%S'))
         em.add_field(name="Status", value=f"Chilling in {user.status} mode.")
