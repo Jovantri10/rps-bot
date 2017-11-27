@@ -51,7 +51,7 @@ class RPSBot(commands.Bot):
     @commands.command()
     @commands.guild_only()
     async def region(self, ctx, *, name):
-        '''Set your region!'''
+        '''The available regions are: `Americas`, `Europa`, and `Asia Pacific`. You could also use `clear` to clear your region setting.'''
         name = name.lower()
         regions = ['americas', 'europa', 'asia pacific', 'clear']
         if name == 'apac':
