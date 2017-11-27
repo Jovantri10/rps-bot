@@ -71,6 +71,21 @@ class RPSBot(commands.Bot):
         await ctx.send("Region set. 👍")
 
     @commands.command()
+    async def userinfo(self, ctx, user:discord.Member=None):
+        if not user:
+            user = ctx.author
+        em = discord.Embed(title=str(user), description=f"This user joined Discord since {user.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this account is {(ctx.message.created_at - user.created_at).days} days old. 👴", color=0x181818)
+        em.set_thumbnail(user.avatar_url)
+        em.add_field(name="Nickname", value=user.nick)
+        em.add_field(name="Joined At", value=user.joined_at.strftime('%b %d, %Y %H:%M:%S'))
+        em.add_field(name="Status", value=f"Chilling in {user.status} mode.")
+        em.add_field(name="Tag", value=user.mention)
+        em.add_field(name="Roles", value=", ".join([role.name for role in list(reversed(user.roles)) if not role.is_default()]), inline=False)
+        await ctx.send(embed=em)
+
+
+
+    @commands.command()
     async def poll(self, ctx, *, poll):
         '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices.'''
         nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
