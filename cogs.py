@@ -160,7 +160,7 @@ class Cog:
             self.vc = await ctx.author.voice.channel.connect()
             await ctx.send("Joined the music channel.")
 
-        @commands.commnad()
+        @commands.command()
         @commands.guild_only()
         async def leave(self, ctx):
             """Have the bot leave the music channel."""
