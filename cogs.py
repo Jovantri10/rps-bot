@@ -209,7 +209,12 @@ class Cog:
             try:
                 self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
             except Exception as e:
-                return await ctx.send(str(e))
+                if str(e) == "'NoneType' object has no attribute 'play'":
+                    await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
+                elif str(e) == "Already playing audio.":
+                    await ctx.send("The bot is already playing something. Queueing songs will be coming soon.")
+                else:
+                    return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
 
 
