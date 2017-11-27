@@ -175,6 +175,17 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
+        async def stop(self, ctx):
+            """Stop the music."""
+            if not self.vc:
+                return await ctx.send("I can't stop playing if I'm not even in a voice channel.")
+            if not self.vc.is_playing():
+                return await ctx.send("I'm not even playing music.")
+            self.vc.stop()
+            await ctx.send("Stopped the music.")
+
+        @commands.command()
+        @commands.guild_only()
         async def play(self, ctx, *, video):
             """Play some tunes 🎵"""
             if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
