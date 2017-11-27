@@ -121,6 +121,7 @@ class Cog:
 
         def __init__(self, bot):
             self.bot = bot
+            self.vc = None
 
         async def get_results(self, video):
             async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}) as resp:
@@ -150,11 +151,29 @@ class Cog:
             def error(self, msg):
                 print(msg)
             
+        @commands.command()
+        @commands.guild_only()
+        async def join(self, ctx):
+            """Have the bot join the music channel."""
+            if self.vc:
+                return await ctx.send("Already joined a voice channel!")
+            self.vc = await ctx.guild.get_channel(371289859127771146).connect()
+            await ctx.send("Joined the music channel.")
+
+        @commands.commnad()
+        @commands.guild_only()
+        async def leave(self, ctx):
+            """Have the bot leave the music channel."""
+            if not self.vc:
+                return await ctx.send("I can't leave a channel if I'm not in one...")
+            await self.vc.disconnect()
+            self.vc = None
+            await ctx.send("Left the music channel.")
 
         @commands.command()
         @commands.guild_only()
         async def play(self, ctx, *, video):
-            """Doesn't work until we get a VPS"""
+            """Play some tunes 🎵"""
             if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
                 url = video
                 name = await self.get_name_from_vid(video)
@@ -186,9 +205,8 @@ class Cog:
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             try:
                 self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
-            except:
-                self.vc = await ctx.guild.get_channel(371289859127771146).connect()
-                self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
+            except Exception as e:
+                return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
 
 
