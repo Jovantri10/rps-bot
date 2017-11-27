@@ -36,6 +36,7 @@ class RPSBot(commands.Bot):
         perms = discord.Permissions.none()
         perms.administrator = True
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
+        await self.change_presence(game=discord.Game(name="DM for support."))
 
     async def on_member_join(self, member):
         await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
@@ -72,6 +73,7 @@ class RPSBot(commands.Bot):
 
     @commands.command(aliases=["ui"])
     async def userinfo(self, ctx, user:discord.Member=None):
+        """Gets a user info. Defaults to the user who called the command."""
         if not user:
             user = ctx.author
         em = discord.Embed(title=str(user), description=f"This user joined Discord since {user.created_at.strftime('%b %d, %Y %H:%M:%S')}. In other words this account is {(ctx.message.created_at - user.created_at).days} days old. 👴", color=0x181818)
