@@ -45,7 +45,7 @@ class RPSBot(commands.Bot):
         await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
-        # await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
+        await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
         raise error
 
     @commands.command()
