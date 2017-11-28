@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, json
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes
 
 class Cog:
     def __init__(self, bot):
@@ -122,8 +122,6 @@ class Cog:
         def __init__(self, bot):
             self.bot = bot
             self.vc = None
-            self.m_list = []
-            self.play = True
 
         async def get_results(self, video):
             async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}) as resp:
@@ -173,7 +171,6 @@ class Cog:
                 return await ctx.send("I can't leave a channel if I'm not in one...")
             await self.vc.disconnect()
             self.vc = None
-            self.play = False
             await ctx.send("Left the music channel.")
 
         @commands.command()
@@ -185,75 +182,51 @@ class Cog:
             if not self.vc.is_playing():
                 return await ctx.send("I'm not even playing music.")
             self.vc.stop()
-            self.play = False
             await ctx.send("Stopped the music.")
 
-        @commands.command(name="play")
+        @commands.command()
         @commands.guild_only()
-        async def _play(self, ctx, *, video=None):
+        async def play(self, ctx, *, video):
             """Play some tunes 🎵"""
-            with open("music.json") as f:
-                self.m_list = json.load(f)
-            if video:
-                if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
-                    url = video
-                    name = await self.get_name_from_vid(video)
-                    if not name:
-                        return await ctx.send("That's not a valid url!")
-                else:
-                    url, name = await self.get_results(video)
-                    if not url:
-                        return await ctx.send("There aren't any search results.")
+            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
+                url = video
+                name = await self.get_name_from_vid(video)
+                if not name:
+                    return await ctx.send("That's not a valid url!")
+            else:
+                url, name = await self.get_results(video)
+                if not url:
+                    return await ctx.send("There aren't any search results.")
 
-                name_file = []
-                for word in name.split(" "):
-                    if "".join(ch for ch in word if ch.isalnum()) != "":
-                        name_file.append("".join(ch for ch in word if ch.isalnum()))
+            name_file = []
+            for word in name.split(" "):
+                if "".join(ch for ch in word if ch.isalnum()) != "":
+                    name_file.append("".join(ch for ch in word if ch.isalnum()))
 
-                if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
-                    ydl_opts = {
-                        'format': 'bestaudio/best',
-                        'postprocessors': [{
-                            'key': 'FFmpegExtractAudio',
-                            'preferredcodec': 'mp3',
-                            'preferredquality': '192',
-                        }],
-                        'logger': self.Logger()
-                    }
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([url])
-
-                self.m_list.append({"name": name, "id": url.split("v=")[1]})
-                with open("music.json", "w") as f:
-                    f.write(json.dumps(self.m_list, indent=4))
-
+            if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                    'logger': self.Logger()
+                }
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
-            for song in self.m_list:
-                if self.play:
-                    name_file = []
-                    for word in name.split(" "):
-                        if "".join(ch for ch in word if ch.isalnum()) != "":
-                            name_file.append("".join(ch for ch in word if ch.isalnum()))
-                    try:
-                        self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{song["id"]}.mp3'))
-                    except Exception as e:
-                        if str(e) == "'NoneType' object has no attribute 'play'":
-                            return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
-                        elif str(e) == "Already playing audio.":
-                            return await ctx.send("The bot is already playing something. Queueing songs will be coming soon.")
-                        else:
-                            return await ctx.send(str(e))
-                    await ctx.send(f"Playing {song['name']}")
-                    while True:
-                        if not self.vc.is_playing():
-                            break
-                    self.m_list.remove({"name": song["name"], "id": song["id"]})
-            self.play = True
-            
-                    
-            
-
+            try:
+                self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
+            except Exception as e:
+                if str(e) == "'NoneType' object has no attribute 'play'":
+                    return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
+                elif str(e) == "Already playing audio.":
+                    return await ctx.send("The bot is already playing something. Queueing songs will be coming soon.")
+                else:
+                    return await ctx.send(str(e))
+            await ctx.send(f"Playing {name}")
 
 
 
