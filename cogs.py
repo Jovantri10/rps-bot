@@ -245,8 +245,9 @@ class Cog:
                         else:
                             return await ctx.send(str(e))
                     await ctx.send(f"Playing {song['name']}")
-                    while self.vc.is_playing():
-                        pass
+                    while True:
+                        if not self.vc.is_playing():
+                            break
                     self.m_list.remove({"name": song["name"], "id": song["id"]})
             self.play = True
             
