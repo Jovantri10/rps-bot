@@ -223,7 +223,7 @@ class Cog:
                 if str(e) == "'NoneType' object has no attribute 'play'":
                     return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
                 elif str(e) == "Already playing audio.":
-                    return await ctx.send("The bot is already playing something. Queueing songs will be coming soon.")
+                    return await ctx.send("The bot is already playing something. Wait till the song is finished.")
                 else:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
