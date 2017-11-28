@@ -24,24 +24,42 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(kick_members=True)
-        async def kick(self, ctx, member:discord.Member):
+        async def kick(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Kicks a member'''
             try:
-                await ctx.guild.kick(member)
+                if reason == "No Reason"
+                    await ctx.guild.kick(member)
+                else:
+                    await ctx.guild.kick(member, reason=reason)
                 await ctx.send("Done. 👍")
             except discord.Forbidden:
                 return await ctx.send("I can't kick that member!")
+            em = discord.Embed(title="Kick", color=0xc90000)
+            em.add_field(name="User", value=str(member))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            em.add_field(name="Reason", value=reason, inline=False)
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+
 
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(ban_members=True)
-        async def ban(self, ctx, member:discord.Member):
+        async def ban(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Bans a member'''
             try:
-                await ctx.guild.ban(member)
+                if reason == "No Reason":
+                    await ctx.guild.ban(member)
+                else:
+                    await ctx.guild.ban(member, reason=reason)
                 await ctx.send("Done. 👍")
             except discord.Forbidden:
                 return await ctx.send("I can't ban that member!")
+            em = discord.Embed(title="Ban", color=0xc90000)
+            em.add_field(name="User", value=str(member))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            em.add_field(name="Reason", value=reason, inline=False)
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+
 
         @commands.command()
         @commands.guild_only()
@@ -57,6 +75,11 @@ class Cog:
                 return await ctx.send('Either that user is not in the banlist, or it doesn\'nt even exist.')
             await ctx.guild.unban(user.user)
             await ctx.send("Done. 👍")
+            em = discord.Embed(title="Unban", color=0x3ace00)
+            em.add_field(name="User", value=str(user.user))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+
 
         @commands.command(aliases=['clear'])
         @commands.has_permissions(manage_messages=True)
@@ -70,24 +93,64 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(mute_members=True)
-        async def unmute(self, ctx, member:discord.Member):
+        async def unmute(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Unmutes a user. He/she will finally be able to talk!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
             if muted not in member.roles:
                 return await ctx.send("I can't unmute someone who hasn't been muted yet...")
             await member.remove_roles(muted)
             await ctx.send(f"Unmuted {member}. 👍")
+            em = discord.Embed(title="Unmute", color=0x3ace00)
+            em.add_field(name="User", value=str(member))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            em.add_field(name="Reason", value=reason, inline=False)
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
 
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(mute_members=True)
-        async def mute(self, ctx, member:discord.Member):
+        async def mute(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Mutes a user. What else did you think this did?!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
             if muted in member.roles:
                 return await ctx.send("I can't mute someone who's already been muted...")
             await member.add_roles(muted)
             await ctx.send(f"Muted {member}. 👍")
+            em = discord.Embed(title="Mute", color=0xef7f07)
+            em.add_field(name="User", value=str(member))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            em.add_field(name="Reason", value=reason, inline=False)
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+
+        @commands.command()
+        @commands.guild_only()
+        @commands.has_role("Server Admin")
+        async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
+            with open("warnings.json") as f:
+                warn_json = json.load(f)
+            if member.id not in warn_json:
+                warn_json[member.id] = [reason]
+            else:
+                warn_json[member.id].append(reason)
+            with open("warnings.json", "w") as f:
+                f.write(json.dumps(warn_json, indent=4))
+            await ctx.send(f"Warned **{member.name}**. This is their {len(warn_json[member.id])}")
+            em = discord.Embed(title="Warn", color=0xf7ca2a)
+            em.add_field(name="User", value=str(member))
+            em.add_field(name="Moderator", value=str(ctx.author))
+            em.add_field(name="Reason", value=reason, inline=False)
+            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+
+        @commands.command()
+        @commands.guild_only()
+        @commands.has_role("Server Admin")
+        async def warnings(self, ctx, member: discord.Member):
+            with open("warnings.json") as f:
+                warn_json = json.load(f)
+            if member.id not in warn_json:
+                return await ctx.send(f"**{member}** does not have any warnings!")
+            await ctx.send(embed=discord.Embed(title=f"{member}'s Warnings", color=0x181818, description='\n'.join([reason for reason in warn_json[member.id]])))
+
 
         @commands.command()
         @commands.guild_only()
