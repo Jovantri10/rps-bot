@@ -128,13 +128,13 @@ class Cog:
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
             with open("warnings.json") as f:
                 warn_json = json.load(f)
-            if member.id not in warn_json:
-                warn_json[member.id] = [reason]
+            if str(member.id) not in warn_json:
+                warn_json[str(member.id)] = [reason]
             else:
-                warn_json[member.id].append(reason)
+                warn_json[str(member.id)].append(reason)
             with open("warnings.json", "w") as f:
                 f.write(json.dumps(warn_json, indent=4))
-            await ctx.send(f"Warned **{member.name}**. This is their {len(warn_json[member.id])}")
+            await ctx.send(f"Warned **{member.name}**. This is their {len(warn_json[str(member.id)])} warning. ⚠️")
             em = discord.Embed(title="Warn", color=0xf7ca2a)
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
@@ -147,9 +147,9 @@ class Cog:
         async def warnings(self, ctx, member: discord.Member):
             with open("warnings.json") as f:
                 warn_json = json.load(f)
-            if member.id not in warn_json:
+            if str(member.id) not in warn_json:
                 return await ctx.send(f"**{member}** does not have any warnings!")
-            await ctx.send(embed=discord.Embed(title=f"{member}'s Warnings", color=0x181818, description='\n'.join([reason for reason in warn_json[member.id]])))
+            await ctx.send(embed=discord.Embed(title=f"{member}'s Warnings", color=0x181818, description='\n'.join([reason for reason in warn_json[str(member.id)]])))
 
 
         @commands.command()
