@@ -27,7 +27,7 @@ class Cog:
         async def kick(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Kicks a member'''
             try:
-                if reason == "No Reason"
+                if reason == "No Reason":
                     await ctx.guild.kick(member)
                 else:
                     await ctx.guild.kick(member, reason=reason)
