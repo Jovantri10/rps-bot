@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json
 
 class Cog:
     def __init__(self, bot):
