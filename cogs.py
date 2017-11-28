@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re
 
 class Cog:
     def __init__(self, bot):
@@ -199,7 +199,7 @@ class Cog:
                     return await ctx.send("There aren't any search results.")
 
             name_file = []
-            for word in name.split(" "):
+            for word in re.findall(r"[\w']+", name):
                 if "".join(ch for ch in word if ch.isalnum()) != "":
                     name_file.append("".join(ch for ch in word if ch.isalnum()))
 
