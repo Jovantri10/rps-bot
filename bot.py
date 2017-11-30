@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json
 from cogs import Cog
 
 class RPSBot(commands.Bot):
@@ -47,6 +47,13 @@ class RPSBot(commands.Bot):
     async def on_command_error(self, ctx, error):
         await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
         raise error
+
+    async def on_message(self, message):
+        with open("commands.json") as f:
+            comms = json.load(f)
+        message = message.replace("!").split(" ")[0]
+        if message in comms:
+            await ctx.send(comms[message])
 
     @commands.command()
     @commands.guild_only()
@@ -182,14 +189,6 @@ class RPSBot(commands.Bot):
             if n % 2 == 0:
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
-
-    @commands.command(aliases=['invite'])
-    @commands.guild_only()
-    async def discord(self, ctx):
-        """Gets the invite link for the server."""
-        invites = await ctx.guild.invites()
-        invites = [invite for invite in invites if invite.max_age == 0 and invite.max_uses == 0]
-        await ctx.send(f"**Server invite:** https://discord.gg/{invites[0].code}")
 
         
         

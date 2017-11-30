@@ -180,6 +180,30 @@ class Cog:
                 await member.add_roles(role)
             await ctx.send(f"{', '.join([f'**{r.name}**' for r in roles])} added to **{member.name}**")
 
+        @commands.command(aliases=["cc"])
+        @commands.guild_only()
+        @commands.has_permissions(manage_server=True)
+        async def customcom(self, ctx, command, *, response):
+            """Creates a custom command."""
+            with open("commands.json") as f:
+                comms = json.load(f)
+            comms[command] = response
+            with open("commands.json", "w") as f:
+                f.write(json.dumps(comms, indent=4))
+            await ctx.send("Added command. 👍")
+
+        @commands.command(aliases=["rmc"])
+        @commands.guild_only()
+        @commands.has_permissions(manage_server=True)
+        async def removecom(self, ctx, command):
+            """Removes a custom command."""
+            with open("commands.json") as f:
+                comms = json.load(f)
+            comms = {comm: resp for comm, resp in comms if comm != command}
+            with open("commands.json", "w") as f:
+                f.write(json.dumps(comms, indent=4))
+            await ctx.send("Removed command. 👍")
+
     class Music:
 
         def __init__(self, bot):
