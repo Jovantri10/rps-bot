@@ -51,7 +51,7 @@ class RPSBot(commands.Bot):
     async def on_message(self, message):
         with open("commands.json") as f:
             comms = json.load(f)
-        message_str = message.content.replace("!").split(" ")[0]
+        message_str = message.content.replace("!", "").split(" ")[0]
         if message_str in comms:
             await ctx.send(comms[message])
 
