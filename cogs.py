@@ -181,7 +181,7 @@ class Cog:
             await ctx.send(f"{', '.join([f'**{r.name}**' for r in roles])} added to **{member.name}**")
 
         @commands.group(aliases=["cc"], invoke_without_command=False)
-        @commands.guild_only
+        @commands.guild_only()
         async def customcom(self, ctx):
             with open("commands.json") as f:
                 await ctx.send(embed=discord.Embed(title="List of Available Custom Commands:", description="\n".join([comm for comm, resp in json.load(f)])))
