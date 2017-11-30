@@ -30,7 +30,11 @@ class RPSBot(commands.Bot):
             if isinstance(func, commands.Command):
                 self.add_command(func)
         for cog in Cog.all_cogs(Cog):
-            self.add_cog(cog(self))
+            try:
+                self.add_cog(cog(self))
+                print("Added cog")
+            except Exception as e:
+                print(f"ERROR: {e}")
 
     async def on_ready(self):
         perms = discord.Permissions.none()
@@ -49,6 +53,7 @@ class RPSBot(commands.Bot):
         raise error
 
     async def on_message(self, message):
+        await self.process_commands(message)
         with open("commands.json") as f:
             comms = json.load(f)
         message_str = message.content.replace("!", "").split(" ")[0]

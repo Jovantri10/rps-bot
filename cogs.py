@@ -180,15 +180,16 @@ class Cog:
                 await member.add_roles(role)
             await ctx.send(f"{', '.join([f'**{r.name}**' for r in roles])} added to **{member.name}**")
 
-        @commands.group(aliases=["cc"], invoke_without_command=False)
+        @commands.group(aliases=["cc"], invoke_without_command=True)
         @commands.guild_only()
         async def customcom(self, ctx):
             with open("commands.json") as f:
-                await ctx.send(embed=discord.Embed(title="List of Available Custom Commands:", description="\n".join([comm for comm, resp in json.load(f)])))
+                comms = json.load(f)
+            await ctx.send(embed=discord.Embed(color=0x181818, title="List of Available Custom Commands:", description="\n".join([f"{ctx.prefix}{comm}" for comm in list(comms.keys())])))
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_permissions(manage_server=True)
+        @commands.has_role("Server Admin")
         async def add(self, ctx, command, *, response):
             """Creates a custom command."""
             with open("commands.json") as f:
@@ -200,7 +201,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_permissions(manage_server=True)
+        @commands.has_role("Server Admin")
         async def remove(self, ctx, command):
             """Removes a custom command."""
             with open("commands.json") as f:
