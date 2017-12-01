@@ -336,7 +336,7 @@ class Cog:
             return
 
         @bank.command()
-        @commands.guild_only
+        @commands.guild_only()
         async def delete(self, ctx):
             """Deletes your account."""
             with open("econ.json") as f:
