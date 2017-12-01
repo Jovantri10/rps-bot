@@ -369,7 +369,7 @@ class Cog:
             if not member:
                 member = ctx.author
             if str(member.id) not in economy_dict:
-                if str(member.id) == str(ctx.author.id)
+                if str(member.id) == str(ctx.author.id):
                     return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
                 else:
                     return await ctx.send("He doesn't have an account in the RPS bank. Do `!bank register` to register an account.")
