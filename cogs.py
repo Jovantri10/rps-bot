@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json, random
 
 class Cog:
     def __init__(self, bot):
@@ -126,6 +126,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_role("Server Admin")
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
+            """Warns a member."""
             with open("warnings.json") as f:
                 warn_json = json.load(f)
             if str(member.id) not in warn_json:
@@ -145,6 +146,7 @@ class Cog:
         @commands.guild_only()
         @commands.has_role("Server Admin")
         async def warnings(self, ctx, member: discord.Member):
+            """Gets a list of warnings of a member."""
             with open("warnings.json") as f:
                 warn_json = json.load(f)
             if str(member.id) not in warn_json:
@@ -183,6 +185,7 @@ class Cog:
         @commands.group(aliases=["cc"], invoke_without_command=True)
         @commands.guild_only()
         async def customcom(self, ctx):
+            """Gets a list of custom commands."""
             with open("commands.json") as f:
                 comms = json.load(f)
             await ctx.send(embed=discord.Embed(color=0x181818, title="List of Available Custom Commands:", description="\n".join([f"{ctx.prefix}{comm}" for comm in list(comms.keys())])))
@@ -321,6 +324,59 @@ class Cog:
                 else:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
+
+    class Economy:
+
+        def __init__(self, bot):
+            self.bot = bot
+
+        @commands.command()
+        @commands.guild_only()
+        async def register(self, ctx):
+            with open("econ.json") as f:
+                economy_dict = json.load(f)
+            if str(ctx.author.id) in economy_dict:
+                return await ctx.send("You already have an account at the RPS Bank!")
+            economy_dict[str(ctx.author.id)] = 0
+            with open("econ.json", "w") as f:
+                f.write(json.dumps(economy_dict, indent=4))
+            await ctx.send("Account registered.")
+
+        @commands.command()
+        @commands.guild_only()
+        async def slot(self, ctx, bid):
+            """Play the slot machine"""
+            with open("econ.json") as f:
+                economy_dict = json.load(f)
+            if str(ctx.author.id) not in economy_dict:
+                return await ctx.send("You don't have an account in the RPS bank. Do `!register` to register an account.")
+            em = discord.Embed(color=0x181818, title=f"{ctx.author}'s Bid")
+            desc = []
+            possible_combinations = ["🌀", "❄️", "🍒", "🌻", "❤️", "🍄", '🍪', '🍀']
+            payline = [possible_combinations[random.randint(0, len(possible_combinations)-1)] for i in range(3)]
+            generated_slot = f"  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n>{payline[0]} {payline[1]} {payline[2]}\n  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n––––––––––––––––\n"
+            em.description = generated_slot
+            if payline[0] == "🍀" and payline[0] == payline[1] and payline[1] == payline[2]:
+                desc = [8, "OOOOOO! Three clovers! You got lucky! Your bid has been multiplied by 8 times!"]
+            if payline[0] == "🍒" and payline[0] == payline[1] and payline[1] == payline[2]:
+                desc = [6, "Wow! Three cherries! Your bid has been multiplied by 6 times!"]
+            elif payline[0] == payline[1] and payline[1] == payline[2]:
+                desc = [3, "Three matching symbols! Your bid has been multiplied by 3 times!"]
+            elif payline[0] == payline[1] or payline[1] == payline[2]:
+                desc = [2, "Two consecutive symbols! Your bid has been multiplied by 2 times!"]
+            else:
+                desc = [0, "Nothing!"]
+            if desc[0] == 0:
+                final = economy_dict[str(ctx.author.id)] - bid
+            else:
+                final = economy_dict[str(ctx.author.id)] + (bid*desc[0])
+            em.description += desc[1] + f"\nYour bid: {bid}\n{economy_dict[str(ctx.author.id)]} → {final}"
+            economy_dict[str(ctx.author.id)] = final
+            with open("econ.json", "w") as f:
+                f.write(json.dumps(economy_dict, indent=4))
+            return await ctx.send(embed=em)
+            
+                            
 
 
 
