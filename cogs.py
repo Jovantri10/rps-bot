@@ -330,7 +330,7 @@ class Cog:
         def __init__(self, bot):
             self.bot = bot
 
-        @commands.group()
+        @commands.group(invoke_without_command=True)
         @commands.guild_only()
         async def bank(self, ctx):
             return
