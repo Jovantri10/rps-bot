@@ -379,7 +379,7 @@ class Cog:
             desc = []
             possible_combinations = ["🌀", "❄️", "🍒", "🌻", "❤️", "🍄", '🍪', '🍀']
             payline = [possible_combinations[random.randint(0, len(possible_combinations)-1)] for i in range(3)]
-            generated_slot = f"  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n>{payline[0]} {payline[1]} {payline[2]}\n  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n––––––––––––––––\n"
+            generated_slot = f"Result:\n  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n>{payline[0]} {payline[1]} {payline[2]}\n  {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]} {possible_combinations[random.randint(0, len(possible_combinations)-1)]}\n––––––––––––––––\n"
             em.description = generated_slot
             if payline[0] == "🍀" and payline[0] == payline[1] and payline[1] == payline[2]:
                 desc = [8, "OOOOOO! Three clovers! You got lucky! Your bid has been multiplied by 8 times!"]
