@@ -363,6 +363,20 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
+        async def balance(self, ctx, member: discord.Member=None):
+            with open("econ.json") as f:
+                economy_dict = json.load(f)
+            if not member:
+                member = ctx.author
+            if str(member.id) not in economy_dict:
+                if str(member.id) == str(ctx.author.id)
+                    return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
+                else:
+                    return await ctx.send("He doesn't have an account in the RPS bank. Do `!bank register` to register an account.")
+            await ctx.send(f"{member.mention} has {economy_dict[str(member.id)]} credits!")
+
+        @commands.command()
+        @commands.guild_only()
         async def payday(self, ctx):
             """Payday!"""
             with open("gamtime.json") as f:
@@ -373,7 +387,7 @@ class Cog:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
             if str(ctx.author.id) in gamtime:
                 og_datetime = datetime.datetime(gamtime[str(ctx.author.id)]["year"], gamtime[str(ctx.author.id)]["month"], gamtime[str(ctx.author.id)]["day"], gamtime[str(ctx.author.id)]["hour"], gamtime[str(ctx.author.id)]["minute"], gamtime[str(ctx.author.id)]["second"])
-                if (message.created_at-og_datetime).total_seconds() < 180:
+                if (ctx.message.created_at-og_datetime).total_seconds() < 180:
                     return await ctx.send("Too soon! The interval between each payday is 3 minutes!")
             gamtime[str(ctx.author.id)] = {"year": ctx.message.created_at.year, "month": ctx.message.created_at.month, "day": ctx.message.created_at.day, "hour": ctx.message.created_at.hour, "minute": ctx.message.created_at.minute, "second": ctx.message.created_at.second}
             economy_dict[str(ctx.author.id)] = economy_dict[str(ctx.author.id)] + 200
