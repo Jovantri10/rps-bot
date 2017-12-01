@@ -343,7 +343,7 @@ class Cog:
                 economy_dict = json.load(f)
             if str(ctx.author.id) not in economy_dict:
                 return await ctx.send("You don't even have an account at the RPS Bank!")
-            economy_dict = {name: value for name, value in economy_dict if name != str(ctx.author.id)}
+            economy_dict = {name: value for name, value in economy_dict.items() if name != str(ctx.author.id)}
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
 
