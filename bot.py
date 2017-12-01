@@ -32,7 +32,7 @@ class RPSBot(commands.Bot):
         for cog in Cog.all_cogs(Cog):
             try:
                 self.add_cog(cog(self))
-                print("Added cog")
+                print(f"Added cog: {cog.__name__}")
             except Exception as e:
                 print(f"ERROR: {e}")
 
