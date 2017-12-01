@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
 import youtube_dl
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json, random
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json, random, datetime
 
 class Cog:
     def __init__(self, bot):
@@ -356,10 +356,32 @@ class Cog:
                 economy_dict = json.load(f)
             if str(ctx.author.id) in economy_dict:
                 return await ctx.send("You already have an account at the RPS Bank!")
-            economy_dict[str(ctx.author.id)] = 0
+            economy_dict[str(ctx.author.id)] = 200
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
             await ctx.send("Account registered.")
+
+        @commands.command()
+        @commands.guild_only()
+        async def payday(self, ctx):
+            """Payday!"""
+            with open("gamtime.json") as f:
+                gamtime = json.load(f)
+            with open("econ.json") as f:
+                economy_dict = json.load(f)
+            if str(ctx.author.id) not in economy_dict:
+                return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
+            if str(ctx.author.id) in gamtime_dict:
+                og_datetime = datetime.datetime(gamtime[str(ctx.author.id)]["year"], gamtime[str(ctx.author.id)]["month"], gamtime[str(ctx.author.id)]["day"], gamtime[str(ctx.author.id)]["hour"], gamtime[str(ctx.author.id)]["minute"], gamtime[str(ctx.author.id)]["second"])
+                if (message.created_at-og_datetime).total_seconds() < 180:
+                    return await ctx.send("Too soon! The interval between each payday is 3 minutes!")
+            gamtime[str(ctx.author.id)] = {"year": message.created_at.year, "month": message.created_at.month, "day": message.created_at.day, "hour": message.created_at.hour, "minute": message.created_at.year, "second": message.created_at.second}
+            economy_dict[str(ctx.author.id)] = economy_dict[str(ctx.author.id)] + 200
+            with open("gamtime.json", "w") as f:
+                f.write(json.dumps(gamtime, indent=4))
+            with open("econ.json", "w") as f:
+                f.write(json.dumps(economy_dict, indent=4))
+            await ctx.send("Here's 200 credits for you!")
 
         @commands.command()
         @commands.guild_only()

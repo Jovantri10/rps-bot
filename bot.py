@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
-import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json
+import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json, urbanasync
 from cogs import Cog
 
 class RPSBot(commands.Bot):
@@ -10,6 +10,7 @@ class RPSBot(commands.Bot):
         super().__init__(command_prefix="!")
         self.session = aiohttp.ClientSession(loop=self.loop)
         self._last_result = None
+        self.urban_client = urbanasync.Client(session=self.session)
 
     def paginate(self, text: str):
         '''Simple generator that paginates text.'''
@@ -97,7 +98,26 @@ class RPSBot(commands.Bot):
         em.add_field(name="Roles", value=", ".join([role.name for role in list(reversed(user.roles)) if not role.is_default()]), inline=False)
         await ctx.send(embed=em)
 
+    @commands.command()
+    async def urban(self, ctx, *, search_term):
+        try:
+            definition_number = int(search_term.split(" ")[-1])-1
+        except:
+            definition_number = 0
+        try:
+            term = await self.urban_client.get_term(search_term)
+        except LookupError:
+            return await ctx.send("Term does not exist!")
+        definition = term[definition_number]
+        em = discord.Embed(title=definition.word, description=definition.definition, color=0x181818)
+        em.add_field(name="Example", value=definition.example)
+        em.add_field(name="Popularity", value=f"{definition.upvotes} 👍 {definition.downvotes} 👎")
+        em.add_field(name="Author", value=definition.author)
+        em.add_field(name="Permalink", value=f"[Click here!]({definition.permalink})")
+        await ctx.send(embed=em)
 
+        
+        
 
     @commands.command()
     async def poll(self, ctx, *, poll):
