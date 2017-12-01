@@ -346,6 +346,7 @@ class Cog:
             economy_dict = {name: value for name, value in economy_dict.items() if name != str(ctx.author.id)}
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
+            await ctx.send("Account deleted.")
 
         @bank.command()
         @commands.guild_only()
@@ -370,7 +371,7 @@ class Cog:
                 bid_int = int(bid)
             except:
                 return await ctx.send("That's an invalid bid.")
-            if bid_int < economy_dict[str(ctx.author.id)]:
+            if bid_int > economy_dict[str(ctx.author.id)]:
                 return await ctx.send("You don't have enough money to bid that!")
             if str(ctx.author.id) not in economy_dict:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
