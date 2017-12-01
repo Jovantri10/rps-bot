@@ -371,7 +371,7 @@ class Cog:
                 economy_dict = json.load(f)
             if str(ctx.author.id) not in economy_dict:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
-            if str(ctx.author.id) in gamtime_dict:
+            if str(ctx.author.id) in gamtime:
                 og_datetime = datetime.datetime(gamtime[str(ctx.author.id)]["year"], gamtime[str(ctx.author.id)]["month"], gamtime[str(ctx.author.id)]["day"], gamtime[str(ctx.author.id)]["hour"], gamtime[str(ctx.author.id)]["minute"], gamtime[str(ctx.author.id)]["second"])
                 if (message.created_at-og_datetime).total_seconds() < 180:
                     return await ctx.send("Too soon! The interval between each payday is 3 minutes!")
