@@ -348,6 +348,10 @@ class Cog:
             """Play the slot machine"""
             with open("econ.json") as f:
                 economy_dict = json.load(f)
+            try:
+                bid_int = int(bid)
+            except:
+                return await ctx.send("That's an invalid bid.")
             if str(ctx.author.id) not in economy_dict:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!register` to register an account.")
             em = discord.Embed(color=0x181818, title=f"{ctx.author}'s Bid")
@@ -367,10 +371,10 @@ class Cog:
             else:
                 desc = [0, "Nothing!"]
             if desc[0] == 0:
-                final = economy_dict[str(ctx.author.id)] - bid
+                final = economy_dict[str(ctx.author.id)] - bid_int
             else:
-                final = economy_dict[str(ctx.author.id)] + (bid*desc[0])
-            em.description += desc[1] + f"\nYour bid: {bid}\n{economy_dict[str(ctx.author.id)]} → {final}"
+                final = economy_dict[str(ctx.author.id)] + (bid_int*desc[0])
+            em.description += desc[1] + f"\nYour bid: {bid_int}\n{economy_dict[str(ctx.author.id)]} → {final}"
             economy_dict[str(ctx.author.id)] = final
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
