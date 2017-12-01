@@ -330,9 +330,27 @@ class Cog:
         def __init__(self, bot):
             self.bot = bot
 
-        @commands.command()
+        @commands.group()
+        @commands.guild_only()
+        async def bank(self, ctx):
+            return
+
+        @bank.command()
+        @commands.guild_only
+        async def delete(self, ctx):
+            """Deletes your account."""
+            with open("econ.json") as f:
+                economy_dict = json.load(f)
+            if str(ctx.author.id) not in economy_dict:
+                return await ctx.send("You don't even have an account at the RPS Bank!")
+            economy_dict = {name: value for name, value in economy_dict if name != str(ctx.author.id)}
+            with open("econ.json", "w") as f:
+                f.write(json.dumps(economy_dict, indent=4))
+
+        @bank.command()
         @commands.guild_only()
         async def register(self, ctx):
+            """Creates an account."""
             with open("econ.json") as f:
                 economy_dict = json.load(f)
             if str(ctx.author.id) in economy_dict:
@@ -352,8 +370,10 @@ class Cog:
                 bid_int = int(bid)
             except:
                 return await ctx.send("That's an invalid bid.")
+            if bid_int < economy_dict[str(ctx.author.id)]:
+                return await ctx.send("You don't have enough money to bid that!")
             if str(ctx.author.id) not in economy_dict:
-                return await ctx.send("You don't have an account in the RPS bank. Do `!register` to register an account.")
+                return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
             em = discord.Embed(color=0x181818, title=f"{ctx.author}'s Bid")
             desc = []
             possible_combinations = ["🌀", "❄️", "🍒", "🌻", "❤️", "🍄", '🍪', '🍀']
