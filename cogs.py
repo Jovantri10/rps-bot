@@ -375,7 +375,7 @@ class Cog:
                 og_datetime = datetime.datetime(gamtime[str(ctx.author.id)]["year"], gamtime[str(ctx.author.id)]["month"], gamtime[str(ctx.author.id)]["day"], gamtime[str(ctx.author.id)]["hour"], gamtime[str(ctx.author.id)]["minute"], gamtime[str(ctx.author.id)]["second"])
                 if (message.created_at-og_datetime).total_seconds() < 180:
                     return await ctx.send("Too soon! The interval between each payday is 3 minutes!")
-            gamtime[str(ctx.author.id)] = {"year": ctx.message.created_at.year, "month": ctx.message.created_at.month, "day": ctx.message.created_at.day, "hour": ctx.message.created_at.hour, "minute": ctx.message.created_at.year, "second": ctx.message.created_at.second}
+            gamtime[str(ctx.author.id)] = {"year": ctx.message.created_at.year, "month": ctx.message.created_at.month, "day": ctx.message.created_at.day, "hour": ctx.message.created_at.hour, "minute": ctx.message.created_at.minute, "second": ctx.message.created_at.second}
             economy_dict[str(ctx.author.id)] = economy_dict[str(ctx.author.id)] + 200
             with open("gamtime.json", "w") as f:
                 f.write(json.dumps(gamtime, indent=4))
