@@ -361,6 +361,89 @@ class Cog:
                 f.write(json.dumps(economy_dict, indent=4))
             await ctx.send("Account registered.")
 
+        # @commands.command()
+        # @commands.guild_only()
+        # async def blackjack(self, ctx, bid):
+        #     """Play blackjack!"""
+        #     with open("econ.json") as f:
+        #         economy_dict = json.load(f)
+        #     try:
+        #         bid_int = int(bid)
+        #     except:
+        #         return await ctx.send("Invalid bid.")
+        #     if bid_int > economy_dict[str(ctx.author.id)]:
+        #         return await ctx.send("You don't have enough money to bid that!")
+        #     if str(ctx.author.id) not in economy_dict:
+        #         return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
+        #     cards = [
+        #         {"value": 11, "name": "Ace"},
+        #         {"value": 11, "name": "Ace"},
+        #         {"value": 11, "name": "Ace"},
+        #         {"value": 11, "name": "Ace"},
+        #         {"value": 2, "name": "2"},
+        #         {"value": 2, "name": "2"},
+        #         {"value": 2, "name": "2"},
+        #         {"value": 2, "name": "2"},
+        #         {"value": 3, "name": "3"},
+        #         {"value": 3, "name": "3"},
+        #         {"value": 3, "name": "3"},
+        #         {"value": 3, "name": "3"},
+        #         {"value": 4, "name": "4"},
+        #         {"value": 4, "name": "4"},
+        #         {"value": 4, "name": "4"},
+        #         {"value": 4, "name": "4"},
+        #         {"value": 5, "name": "5"},
+        #         {"value": 5, "name": "5"},
+        #         {"value": 5, "name": "5"},
+        #         {"value": 5, "name": "5"},
+        #         {"value": 6, "name": "6"},
+        #         {"value": 6, "name": "6"},
+        #         {"value": 6, "name": "6"},
+        #         {"value": 6, "name": "6"},
+        #         {"value": 7, "name": "7"},
+        #         {"value": 7, "name": "7"},
+        #         {"value": 7, "name": "7"},
+        #         {"value": 7, "name": "7"},
+        #         {"value": 8, "name": "8"},
+        #         {"value": 8, "name": "8"},
+        #         {"value": 8, "name": "8"},
+        #         {"value": 8, "name": "8"},
+        #         {"value": 9, "name": "9"},
+        #         {"value": 9, "name": "9"},
+        #         {"value": 9, "name": "9"},
+        #         {"value": 9, "name": "9"},
+        #         {"value": 10, "name": "10"},
+        #         {"value": 10, "name": "10"},
+        #         {"value": 10, "name": "10"},
+        #         {"value": 10, "name": "10"},
+        #         {"value": 10, "name": "Jack"},
+        #         {"value": 10, "name": "Jack"},
+        #         {"value": 10, "name": "Jack"},
+        #         {"value": 10, "name": "Jack"},
+        #         {"value": 10, "name": "Queen"},
+        #         {"value": 10, "name": "Queen"},
+        #         {"value": 10, "name": "Queen"},
+        #         {"value": 10, "name": "Queen"},
+        #         {"value": 10, "name": "King"},
+        #         {"value": 10, "name": "King"},
+        #         {"value": 10, "name": "King"},
+        #         {"value": 10, "name": "King"}
+        #         ]
+        #     player_cards = []
+        #     for i in range(2):
+        #         player_cards = [cards[random.randint(0, len(cards)-1)] for i in range(2)]
+        #     comp_cards = [cards[random.randint(0, len(cards)-1)] for i in range(2)]
+        #     if {"value": 11, "name": "Ace"} in comp_cards and sum([card["value"] for card in comp_cards]) > 21:
+        #         comp_cards[comp_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
+        #     if {"value": 11, "name": "Ace"} in player_cards and sum([card["value"] for card in player_cards]) > 21:
+        #         player_cards[player_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
+        #     em = discord.Embed(color=0x181818, title=f"Your Cards", description=', '.join([card['name'] for card in player_cards])) 
+        #     em.add_field(name="Score", value=str(sum([card['value'] for card in player_cards])))
+        #     em.add_field(name="Dealer Shows", value=comp_cards[0]["name"])
+        #     em.add_field(name="Choice", value="🇭it, 🇸tay, or 🇩ouble?", inline=False)
+        #     message = await ctx.send(embed=em)
+        #     await message.add_reaction()
+
         @commands.command()
         @commands.guild_only()
         async def balance(self, ctx, member: discord.Member=None):

@@ -57,9 +57,10 @@ class RPSBot(commands.Bot):
         await self.process_commands(message)
         with open("commands.json") as f:
             comms = json.load(f)
-        message_str = message.content.replace("!", "").split(" ")[0]
-        if message_str in comms:
-            await message.channel.send(comms[message_str])
+        if message[0] == "!":
+            message_str = message.content.replace("!", "").split(" ")[0]
+            if message_str in comms:
+                await message.channel.send(comms[message_str])
 
     @commands.command()
     @commands.guild_only()
