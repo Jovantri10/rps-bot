@@ -336,7 +336,7 @@ class Cog:
         def check(self, reaction, user):
             return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.msg_id
 
-        def react_session(self, timeout):
+        async def react_session(self, timeout):
             while True:
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
@@ -490,7 +490,7 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                choice = ReactWait(ctx, self.bot, message.id).react_session(30.0)
+                choice = await ReactWait(ctx, self.bot, message.id).react_session(30.0)
                 
                 if choice == 'hit':
                     counter += 1
