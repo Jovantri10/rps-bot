@@ -20,7 +20,6 @@ class ReactWait:
         while True:
             try:
                 reaction, user = await self.ctx.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
-                print(reaction)
             except asyncio.TimeoutError:
                 return "stay"
             else:
