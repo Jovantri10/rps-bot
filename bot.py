@@ -57,7 +57,7 @@ class RPSBot(commands.Bot):
         await self.process_commands(message)
         with open("commands.json") as f:
             comms = json.load(f)
-        if message.content[0] == "!":
+        if message.content.startswith("!"):
             message_str = message.content.replace("!", "").split(" ")[0]
             if message_str in comms:
                 await message.channel.send(comms[message_str])
