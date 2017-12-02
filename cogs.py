@@ -327,14 +327,12 @@ class Cog:
 
     class ReactWait:
 
-        def __init__(self, ctx, msg_id):
+        def __init__(self, ctx):
             self.ctx = ctx
-            self.bot = bot
             self.emojis = ['🇭', '🇸', '🇩']
-            self.msg_id = msg_id
 
         def check(self, reaction, user):
-            return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.msg_id
+            return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.ctx.message.id
 
         async def react_session(self, timeout=30.0):
             while True:
@@ -402,10 +400,10 @@ class Cog:
                 bid_int = int(bid)
             except:
                 return await ctx.send("Invalid bid.")
-            if bid_int > economy_dict[str(ctx.author.id)]:
-                return await ctx.send("You don't have enough money to bid that!")
             if str(ctx.author.id) not in economy_dict:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
+            if bid_int > economy_dict[str(ctx.author.id)]:
+                return await ctx.send("You don't have enough money to bid that!")
             cards = [
                 {"value": 11, "name": "Ace"},
                 {"value": 11, "name": "Ace"},
@@ -490,7 +488,7 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                react_client = ReactWait(ctx, message.id)
+                react_client = ReactWait(ctx)
                 choice = await react_client.react_session()
                 
                 if choice == 'hit':
