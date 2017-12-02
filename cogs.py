@@ -490,7 +490,8 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                choice = await ReactWait(ctx, self.bot, message.id).react_session(30.0)
+                react_client = ReactWait(ctx, self.bot, message.id)
+                choice = await react_client.react_session(30.0)
                 
                 if choice == 'hit':
                     counter += 1
