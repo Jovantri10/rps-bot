@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from contextlib import redirect_stdout
+from reactwait import ReactWait
 import youtube_dl
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os, ctypes, re, json, random, datetime
 
@@ -325,33 +326,6 @@ class Cog:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
 
-    class ReactWait:
-
-        def __init__(self, ctx):
-            self.ctx = ctx
-            self.emojis = ['🇭', '🇸', '🇩']
-
-        def check(self, reaction, user):
-            return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.ctx.message.id
-
-        async def react_session(self, timeout=30.0):
-            while True:
-                try:
-                    reaction, user = await self.ctx.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
-                except asyncio.TimeoutError:
-                    choice = "stay"
-                else:
-                    if reaction == '🇭':
-                        choice = "hit"
-                    elif reaction == '🇸':
-                        choice = "stay"
-                    elif reaction == '🇩' and counter == 0:
-                        choice = "double"
-                    else:
-                        continue
-                return choice
-
-
     class Economy:
 
         def __init__(self, bot):
@@ -396,6 +370,8 @@ class Cog:
             """Play blackjack!"""
             with open("econ.json") as f:
                 economy_dict = json.load(f)
+            with open("cards.json") as f:
+                cards = json.load(f)
             try:
                 bid_int = int(bid)
             except:
@@ -404,60 +380,6 @@ class Cog:
                 return await ctx.send("You don't have an account in the RPS bank. Do `!bank register` to register an account.")
             if bid_int > economy_dict[str(ctx.author.id)]:
                 return await ctx.send("You don't have enough money to bid that!")
-            cards = [
-                {"value": 11, "name": "Ace"},
-                {"value": 11, "name": "Ace"},
-                {"value": 11, "name": "Ace"},
-                {"value": 11, "name": "Ace"},
-                {"value": 2, "name": "2"},
-                {"value": 2, "name": "2"},
-                {"value": 2, "name": "2"},
-                {"value": 2, "name": "2"},
-                {"value": 3, "name": "3"},
-                {"value": 3, "name": "3"},
-                {"value": 3, "name": "3"},
-                {"value": 3, "name": "3"},
-                {"value": 4, "name": "4"},
-                {"value": 4, "name": "4"},
-                {"value": 4, "name": "4"},
-                {"value": 4, "name": "4"},
-                {"value": 5, "name": "5"},
-                {"value": 5, "name": "5"},
-                {"value": 5, "name": "5"},
-                {"value": 5, "name": "5"},
-                {"value": 6, "name": "6"},
-                {"value": 6, "name": "6"},
-                {"value": 6, "name": "6"},
-                {"value": 6, "name": "6"},
-                {"value": 7, "name": "7"},
-                {"value": 7, "name": "7"},
-                {"value": 7, "name": "7"},
-                {"value": 7, "name": "7"},
-                {"value": 8, "name": "8"},
-                {"value": 8, "name": "8"},
-                {"value": 8, "name": "8"},
-                {"value": 8, "name": "8"},
-                {"value": 9, "name": "9"},
-                {"value": 9, "name": "9"},
-                {"value": 9, "name": "9"},
-                {"value": 9, "name": "9"},
-                {"value": 10, "name": "10"},
-                {"value": 10, "name": "10"},
-                {"value": 10, "name": "10"},
-                {"value": 10, "name": "10"},
-                {"value": 10, "name": "Jack"},
-                {"value": 10, "name": "Jack"},
-                {"value": 10, "name": "Jack"},
-                {"value": 10, "name": "Jack"},
-                {"value": 10, "name": "Queen"},
-                {"value": 10, "name": "Queen"},
-                {"value": 10, "name": "Queen"},
-                {"value": 10, "name": "Queen"},
-                {"value": 10, "name": "King"},
-                {"value": 10, "name": "King"},
-                {"value": 10, "name": "King"},
-                {"value": 10, "name": "King"}
-                ]
             player_cards = []
             for i in range(2):
                 card = cards[random.randint(0, len(cards)-1)]
@@ -472,13 +394,8 @@ class Cog:
                 comp_cards[comp_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
             if {"value": 11, "name": "Ace"} in player_cards and sum([card["value"] for card in player_cards]) > 21:
                 player_cards[player_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
-            em = discord.Embed(color=0x181818) 
-            em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-            em.add_field(name="Your Cards", value=', '.join([card['name'] for card in player_cards]))
-            em.add_field(name="Your Score", value=str(sum([card['value'] for card in player_cards])))
-            em.add_field(name="Dealer Shows", value=comp_cards[0]["name"])
-            em.add_field(name="Choice", value="🇭it, 🇸tay, or 🇩ouble?")
-            message = await ctx.send(embed=em)
+            to_send_str = f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer Shows: {comp_cards[0]['name']}\n🇭it, 🇸tay, or 🇩ouble?"
+            message = await ctx.send(to_send_str)
             await message.add_reaction('🇭')
             await message.add_reaction('🇸')
             await message.add_reaction('🇩')
@@ -486,9 +403,7 @@ class Cog:
             choice = ""
             counter = 0
             while True:
-                em = discord.Embed(color=0x181818)
-                em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                react_client = ReactWait(ctx)
+                react_client = ReactWait(ctx, message)
                 choice = await react_client.react_session()
                 
                 if choice == 'hit':
@@ -501,21 +416,12 @@ class Cog:
                     while {"value": 11, "name": "Ace"} in player_cards and sum([card["value"] for card in player_cards]) > 21:
                         player_cards[player_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
                     if sum([card["value"] for card in player_cards]) > 21:
-                        em.add_field(name="Your Cards", value=', '.join([card['name'] for card in player_cards]))
-                        em.add_field(name="Your Score", value=str(sum([card['value'] for card in player_cards])))
-                        em.add_field(name="Dealer's Cards", value=', '.join([card['name'] for card in comp_cards]))
-                        em.add_field(name="Dealer's Score", value=str(sum([card['value'] for card in comp_cards])))
-                        em.add_field(name="Status", value="BUST!")
                         economy_dict[str(ctx.author.id)] -= bid_int
                         with open("econ.json", "w") as f:
                             f.write(json.dumps(economy_dict, indent=4))
-                        return await ctx.send(embed=em)
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**BUST!**")
                     else:
-                        em.add_field(name="Your Cards", value=', '.join([card['name'] for card in player_cards]))
-                        em.add_field(name="Your Score", value=str(sum([card['value'] for card in player_cards])))
-                        em.add_field(name="Dealer Shows", value=comp_cards[0]["name"])
-                        em.add_field(name="Choice", value="🇭it or 🇸tay?")
-                        message = await ctx.send(embed=em)
+                        message = await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer Shows: {comp_cards[0]['name']}\n🇭it or 🇸tay?")
                         await message.add_reaction('🇭')
                         await message.add_reaction('🇸')
                         continue
@@ -534,15 +440,17 @@ class Cog:
                     while {"value": 11, "name": "Ace"} in comp_cards and sum([card["value"] for card in comp_cards]) > 21:
                         comp_cards[comp_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
                     if sum([card["value"] for card in comp_cards]) > 21 or sum([card["value"] for card in player_cards]) > sum([card["value"] for card in comp_cards]):
-                        em.add_field(name="Your Cards", value=', '.join([card['name'] for card in player_cards]))
-                        em.add_field(name="Your Score", value=str(sum([card['value'] for card in player_cards])))
-                        em.add_field(name="Dealer's Cards", value=', '.join([card['name'] for card in comp_cards]))
-                        em.add_field(name="Dealer's Score", value=str(sum([card['value'] for card in comp_cards])))
-                        em.add_field(name="Status", value="WINNER!")
                         economy_dict[str(ctx.author.id)] += bid_int
                         with open("econ.json", "w") as f:
                             f.write(json.dumps(economy_dict, indent=4))
-                        return await ctx.send(embed=em)
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**WINNER!**")
+                    elif sum([card["value"] for card in player_cards]) == sum([card["value"] for card in comp_cards]):
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**DRAW!**")
+                    else:
+                        economy_dict[str(ctx.author.id)] -= bid_int
+                        with open("econ.json", "w") as f:
+                            f.write(json.dumps(economy_dict, indent=4))
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**HOUSE WINS!**")
 
 
         @commands.command()
