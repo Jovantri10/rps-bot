@@ -511,7 +511,7 @@ class Cog:
                     em.add_field(name="Dealer's Cards", value=', '.join([card['name'] for card in comp_cards]))
                     em.add_field(name="Dealer's Score", value=str(sum([card['value'] for card in comp_cards])))
                     em.add_field(name="Status", value="BUST!")
-                    economy_dict[str(ctx.author.id)] -= bid
+                    economy_dict[str(ctx.author.id)] -= bid_int
                     with open("econ.json", "w") as f:
                         f.write(json.dumps(economy_dict, indent=4))
                     return await ctx.send(embed=em)
@@ -521,7 +521,7 @@ class Cog:
                     em.add_field(name="Dealer's Cards", value=', '.join([card['name'] for card in comp_cards]))
                     em.add_field(name="Dealer's Score", value=str(sum([card['value'] for card in comp_cards])))
                     em.add_field(name="Status", value="WINNER!")
-                    economy_dict[str(ctx.author.id)] += bid
+                    economy_dict[str(ctx.author.id)] += bid_int
                     with open("econ.json", "w") as f:
                         f.write(json.dumps(economy_dict, indent=4))
                     return await ctx.send(embed=em)
