@@ -462,7 +462,7 @@ class Cog:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', timeout=30.0, check=check)
+                    reaction, user = await self.bot.wait_for('reaction_add', check=check)
                 except asyncio.TimeoutError:
                     choice = "stay"
                 else:
