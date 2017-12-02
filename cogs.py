@@ -327,7 +327,7 @@ class Cog:
 
     class ReactWait:
 
-        def __init__(self, ctx, bot, msg_id):
+        def __init__(self, ctx, msg_id):
             self.ctx = ctx
             self.bot = bot
             self.emojis = ['🇭', '🇸', '🇩']
@@ -336,10 +336,10 @@ class Cog:
         def check(self, reaction, user):
             return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.msg_id
 
-        async def react_session(self, timeout):
+        async def react_session(self, timeout=30.0):
             while True:
                 try:
-                    reaction, user = await self.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
+                    reaction, user = await self.ctx.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
                 except asyncio.TimeoutError:
                     choice = "stay"
                 else:
@@ -490,8 +490,8 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                react_client = ReactWait(ctx, self.bot, message.id)
-                choice = await react_client.react_session(30.0)
+                react_client = ReactWait(ctx, message.id)
+                choice = await react_client.react_session()
                 
                 if choice == 'hit':
                     counter += 1
