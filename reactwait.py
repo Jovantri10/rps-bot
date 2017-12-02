@@ -8,12 +8,6 @@ class ReactWait:
         self.emojis = ['🇭', '🇸', '🇩']
 
     def check(self, reaction, user):
-        print(user.id)
-        print(self.ctx.author.id)
-        print(reaction.emoji)
-        print(self.emojis)
-        print(reaction.message.id)
-        print(self.message.id)
         if user.id != self.ctx.author.id:
             return False
         if not reaction.emoji in self.emojis:
