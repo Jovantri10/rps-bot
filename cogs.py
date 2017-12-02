@@ -337,7 +337,7 @@ class Cog:
             return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.msg_id
 
         def react_session(self, timeout):
-            while True
+            while True:
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
                 except asyncio.TimeoutError:
