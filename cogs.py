@@ -394,6 +394,16 @@ class Cog:
                 comp_cards[comp_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
             if {"value": 11, "name": "Ace"} in player_cards and sum([card["value"] for card in player_cards]) > 21:
                 player_cards[player_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
+            if sum([card["value"] for card in player_cards]) == 21:
+                economy_dict[str(ctx.author.id)] += bid_int
+                with open("econ.json", "w") as f:
+                    f.write(json.dumps(economy_dict, indent=4))
+                return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**BLACKJACK!**")
+            if sum([card["value"] for card in comp_cards]) == 21:
+                economy_dict[str(ctx.author.id)] -= bid_int
+                with open("econ.json", "w") as f:
+                    f.write(json.dumps(economy_dict, indent=4))
+                return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**DEALER GOT BLACKJACK!**")
             to_send_str = f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer Shows: {comp_cards[0]['name']}\n🇭it, 🇸tay, or 🇩ouble?"
             message = await ctx.send(to_send_str)
             await message.add_reaction('🇭')
@@ -420,6 +430,11 @@ class Cog:
                         with open("econ.json", "w") as f:
                             f.write(json.dumps(economy_dict, indent=4))
                         return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**BUST!**")
+                    if sum([card["value"] for card in player_cards]) == 21:
+                        economy_dict[str(ctx.author.id)] += bid_int
+                        with open("econ.json", "w") as f:
+                            f.write(json.dumps(economy_dict, indent=4))
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**BLACKJACK!**")
                     else:
                         message = await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer Shows: {comp_cards[0]['name']}\n🇭it or 🇸tay?")
                         await message.add_reaction('🇭')
@@ -439,7 +454,12 @@ class Cog:
                         cards.remove(card)
                     while {"value": 11, "name": "Ace"} in comp_cards and sum([card["value"] for card in comp_cards]) > 21:
                         comp_cards[comp_cards.index({"value": 11, "name": "Ace"})]["value"] = 1
-                    if sum([card["value"] for card in comp_cards]) > 21 or sum([card["value"] for card in player_cards]) > sum([card["value"] for card in comp_cards]):
+                    if sum([card["value"] for card in comp_cards]) == 21:
+                        economy_dict[str(ctx.author.id)] -= bid_int
+                        with open("econ.json", "w") as f:
+                            f.write(json.dumps(economy_dict, indent=4))
+                        return await ctx.send(f"{ctx.author.mention}\nYour Cards: {', '.join([card['name'] for card in player_cards])}\nYour Score: {sum([card['value'] for card in player_cards])}\nDealer's Cards: {', '.join([card['name'] for card in comp_cards])}\nDealer's Score: {sum([card['value'] for card in comp_cards])}\n**DEALER GOT BLACKJACK!**")
+                    elif sum([card["value"] for card in comp_cards]) > 21 or sum([card["value"] for card in player_cards]) > sum([card["value"] for card in comp_cards]):
                         economy_dict[str(ctx.author.id)] += bid_int
                         with open("econ.json", "w") as f:
                             f.write(json.dumps(economy_dict, indent=4))
