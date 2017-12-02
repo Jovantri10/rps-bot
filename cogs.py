@@ -324,42 +324,7 @@ class Cog:
                 else:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
-
-    class ReactWait:
-
-        def __init__(self, ctx, bot, msg_id, counter):
-            self.ctx = ctx
-            self.bot = bot
-            self.emojis = ['🇭', '🇸', '🇩']
-            self.msg_id = msg_id
-            self.counter = counter
-
-        def check(self, reaction, user):
-            if user != self.ctx.author:
-                return False
-            if str(reaction.emoji) not in self.emojis:
-                return False
-            if reaction.message.id == self.msg_id:
-                return False
-            if reaction.emoji == '🇩' and counter != 0:
-                return False
-            return True
-
-        async def react_session(self, timeout):
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
-            except asyncio.TimeoutError:
-                choice = "stay"
-            else:
-                if reaction == '🇭':
-                    choice = "hit"
-                elif reaction == '🇸':
-                    choice = "stay"
-                elif reaction == '🇩' and counter == 0:
-                    choice = "double"
-                else:
-                    continue
-            return choice
+            
 
 
     class Economy:
@@ -498,7 +463,26 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                choice = await ReactWait(ctx, self.bot, message.id, counter).react_session(30.0)
+                def check(reaction, user):
+                    return user == ctx.author and str(reaction.emoji) in ['🇭', '🇸', '🇩'] and reaction.message == message
+                while True:
+                    try:
+                        reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=30.0)
+                    except asyncio.TimeoutError:
+                        choice = "stay"
+                        break
+                    else:
+                        if reaction == '🇭':
+                            choice = "hit"
+                            break
+                        elif reaction == '🇸':
+                            choice = "stay"
+                            break
+                        elif reaction == '🇩' and counter == 0:
+                            choice = "double"
+                            break
+                        else:
+                            continue
                 
                 if choice == 'hit':
                     counter += 1
