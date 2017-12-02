@@ -324,7 +324,34 @@ class Cog:
                 else:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
-            
+
+    class ReactWait:
+
+        def __init__(self, ctx, bot, msg_id):
+            self.ctx = ctx
+            self.bot = bot
+            self.emojis = ['🇭', '🇸', '🇩']
+            self.msg_id = msg_id
+
+        def check(self, reaction, user):
+            return user == self.ctx.author and str(reaction.emoji) in self.emojis and reaction.message.id == self.msg_id
+
+        def react_session(self, timeout):
+            while True
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', check=self.check, timeout=timeout)
+                except asyncio.TimeoutError:
+                    choice = "stay"
+                else:
+                    if reaction == '🇭':
+                        choice = "hit"
+                    elif reaction == '🇸':
+                        choice = "stay"
+                    elif reaction == '🇩' and counter == 0:
+                        choice = "double"
+                    else:
+                        continue
+                return choice
 
 
     class Economy:
@@ -463,26 +490,7 @@ class Cog:
             while True:
                 em = discord.Embed(color=0x181818)
                 em.set_author(name=str(ctx.author), icon_url=ctx.author.avatar_url)
-                def check(reaction, user):
-                    return user == ctx.author and str(reaction.emoji) in ['🇭', '🇸', '🇩'] and reaction.message == message
-                while True:
-                    try:
-                        reaction, user = await self.bot.wait_for('reaction_add', check=check, timeout=30.0)
-                    except asyncio.TimeoutError:
-                        choice = "stay"
-                        break
-                    else:
-                        if reaction == '🇭':
-                            choice = "hit"
-                            break
-                        elif reaction == '🇸':
-                            choice = "stay"
-                            break
-                        elif reaction == '🇩' and counter == 0:
-                            choice = "double"
-                            break
-                        else:
-                            continue
+                choice = ReactWait(ctx, self.bot, message.id).react_session(30.0)
                 
                 if choice == 'hit':
                     counter += 1
