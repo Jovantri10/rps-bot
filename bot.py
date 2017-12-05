@@ -130,7 +130,7 @@ class RPSBot(commands.Bot):
             await ctx.send("Bot set to maintenance mode.")
             self.maintenance = True
         else:
-            await self.change_presence(game=discord.Game(name="DM For Support!"), status=discord.Status.online)
+            await self.change_presence(game=discord.Game(name="DM For Support."), status=discord.Status.online)
             await ctx.send("Removed maintenance mode.")
             self.maintenance = False
         
