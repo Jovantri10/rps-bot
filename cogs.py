@@ -125,7 +125,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("Server Admin")
+        @commands.has_role("Moderator")
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
             """Warns a member."""
             with open("warnings.json") as f:
@@ -205,7 +205,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("Server Admin")
+        @commands.has_role("Moderator")
         async def remove(self, ctx, command):
             """Removes a custom command."""
             with open("commands.json") as f:
