@@ -193,7 +193,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("Server Admin")
+        @commands.has_role("Moderator")
         async def add(self, ctx, command, *, response):
             """Creates a custom command."""
             with open("commands.json") as f:
