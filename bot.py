@@ -11,6 +11,7 @@ class RPSBot(commands.Bot):
         self.session = aiohttp.ClientSession(loop=self.loop)
         self._last_result = None
         self.urban_client = urbanasync.Client(session=self.session)
+        self.maintenance = False
 
     def paginate(self, text: str):
         '''Simple generator that paginates text.'''
@@ -54,6 +55,8 @@ class RPSBot(commands.Bot):
         raise error
 
     async def on_message(self, message):
+        if self.maintenance:
+            return await message.channel.send("Bot is under maintenance right now, so all commands are temporarily disabled.")
         await self.process_commands(message)
         with open("commands.json") as f:
             comms = json.load(f)
@@ -117,7 +120,19 @@ class RPSBot(commands.Bot):
         em.add_field(name="Permalink", value=f"[Click here!]({definition.permalink})")
         await ctx.send(embed=em)
 
-        
+    
+    @commands.command(hidden=True)
+    async def maintenance(self, ctx):
+        if ctx.author.id != 273381165229146112:
+            return
+        if not self.maintenance:
+            await self.change_presence(game=discord.Game(name="Maintenance!"), status=discord.Status.dnd)
+            await ctx.send("Bot set to maintenance mode.")
+            self.maintenance = True
+        else:
+            await self.change_presence(game=discord.Game(name="DM For Support!"), status=discord.Status.online)
+            await ctx.send("Removed maintenance mode.")
+            self.maintenance = False
         
 
     @commands.command()
