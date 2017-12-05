@@ -210,7 +210,7 @@ class Cog:
             """Removes a custom command."""
             with open("commands.json") as f:
                 comms = json.load(f)
-            comms = {comm: resp for comm, resp in comms if comm != command}
+            comms = {comm: resp for comm, resp in comms.items() if comm != command}
             with open("commands.json", "w") as f:
                 f.write(json.dumps(comms, indent=4))
             await ctx.send("Removed command. 👍")
