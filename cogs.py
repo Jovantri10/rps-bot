@@ -125,7 +125,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("Moderator")
+        @commands.has_role("RPS Support Team")
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
             """Warns a member."""
             with open("warnings.json") as f:
@@ -193,7 +193,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("Moderator")
+        @commands.has_role("RPS Support Team")
         async def add(self, ctx, command, *, response):
             """Creates a custom command."""
             with open("commands.json") as f:
@@ -205,7 +205,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("Moderator")
+        @commands.has_role("RPS Support Team")
         async def remove(self, ctx, command):
             """Removes a custom command."""
             with open("commands.json") as f:
