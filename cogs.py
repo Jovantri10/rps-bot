@@ -128,6 +128,8 @@ class Cog:
         @commands.has_role("RPS Support Team")
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
             """Warns a member."""
+            if member == ctx.author:
+                return await ctx.send("Why are you warning yourself? 🤔")
             with open("warnings.json") as f:
                 warn_json = json.load(f)
             if str(member.id) not in warn_json:
@@ -145,7 +147,25 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("Server Admin")
+        @commands.has_role("RPS Support Team")
+        async def delwarn(self, ctx, member: discord.Member):
+            """Deletes Warnings from a member."""
+            with open("warnings.json") as f:
+                warn_json = json.load(f)
+            if str(member.id) not in warn_json:
+                return await ctx.send(f"**{member}** doesn't have any warnings!")
+            if len(warn_json[str(member.id)]) == 1:
+                warn_json = {key: value for key, value in warn_json.items() if key is not str(member.id)}
+            else:
+                warn_json[str(member.id)] = warn_json[str(member.id)][:-1]
+            with open("warnings.json", "w") as f:
+                f.write(json.dumps(warn_json, indent=4))
+            await ctx.send(f"A warning has been removed from **{member}**")
+            
+
+        @commands.command()
+        @commands.guild_only()
+        @commands.has_role("RPS Support Team")
         async def warnings(self, ctx, member: discord.Member):
             """Gets a list of warnings of a member."""
             with open("warnings.json") as f:

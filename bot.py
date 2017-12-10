@@ -45,12 +45,15 @@ class RPSBot(commands.Bot):
         await self.change_presence(game=discord.Game(name="DM for support."))
 
     async def on_member_join(self, member):
-        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
+        await member.add_roles(discord.utils.get(ctx.guild.roles, name="Region Unverified"))
+        await member.guild.get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
         await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.errors.CheckFailure):
+            return await ctx.send("You don't have the permissions to run that command!")
         await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{ctx.command.signature}``", description=ctx.command.short_doc))
         raise error
 
@@ -83,10 +86,38 @@ class RPSBot(commands.Bot):
             if role.name.lower() in regions:
                 await ctx.author.remove_roles(role)
         if name == 'clear':
+            await ctx.author.add_roles(discord.utils.get(ctx.guild.roles, name="Region Unverified"))
             return await ctx.send('Region cleared. 👍')
         found_role = discord.utils.get(ctx.guild.roles, name=name.title())
         await ctx.author.add_roles(found_role)
         await ctx.send("Region set. 👍")
+
+    @commands.command()
+    @commands.guild_only()
+    async def language(self, ctx, *, name):
+        '''The available languages are: `English`, `Spanish`, `French`, `German`, and `Chinese`. You could also use `clear` to clear your language setting.'''
+        name = name.lower()
+        regions = ['english', 'spanish', 'french', 'german', 'chinese', 'clear']
+        if name == 'en':
+            name = 'english'
+        if name == 'es':
+            name = 'spanish'
+        if name == 'fr':
+            name = 'french'
+        if name == 'de':
+            name = 'german'
+        if name == 'zh':
+            name = 'chinese'
+        if name not in regions:
+            return await ctx.send("The available languages are: `English`, `Spanish`, `French`, `German`, and `Chinese`. You could also use `clear` to clear your language setting.")
+        for role in ctx.author.roles:
+            if role.name.lower() in regions:
+                await ctx.author.remove_roles(role)
+        if name == 'clear':
+            return await ctx.send('Language cleared. 👍')
+        found_role = discord.utils.get(ctx.guild.roles, name=name.title())
+        await ctx.author.add_roles(found_role)
+        await ctx.send("Language set. 👍")
 
     @commands.command(aliases=["ui"])
     async def userinfo(self, ctx, user:discord.Member=None):
@@ -121,8 +152,8 @@ class RPSBot(commands.Bot):
         await ctx.send(embed=em)
 
     
-    @commands.command(hidden=True)
-    async def maintenance(self, ctx):
+    @commands.command(hidden=True, name="maintenance")
+    async def _maintenance(self, ctx):
         if ctx.author.id != 273381165229146112:
             return
         if not self.maintenance:
@@ -202,7 +233,6 @@ class RPSBot(commands.Bot):
     @commands.guild_only()
     async def roleinfo(self, ctx, *, rolename):
         """Returns a role's info."""
-        rolename = rolename.lower().replace("apac", "asia pacific")
         role = discord.utils.find(lambda r: r.name.lower() == rolename, ctx.guild.roles)
         if not role:
             return await ctx.send("That role does not exist!")
