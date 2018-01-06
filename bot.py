@@ -45,7 +45,7 @@ class RPSBot(commands.Bot):
         await self.change_presence(game=discord.Game(name="DM for support."))
 
     async def on_member_join(self, member):
-        await member.add_roles(discord.utils.get(member.guild.roles, name="Region Unverified"))
+        await member.add_roles(discord.utils.get(member.guild.roles, id=388471876013391886))
         await member.guild.get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
