@@ -46,10 +46,10 @@ class RPSBot(commands.Bot):
 
     async def on_member_join(self, member):
         await member.add_roles(discord.utils.get(member.guild.roles, id=388471876013391886))
-        await member.guild.get_channel(371220792844746754).send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
+        await discord.utils.get(member.guild.text_channels, name="welcome").send(f"Hello {member.mention}! Welcome to **Royale Prestige Series**! Do `!region` to select your region! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
-        await self.get_guild(371220792844746752).get_channel(371220792844746754).send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
+        await discord.utils.get(member.guild.text_channels, name="welcome").send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.CheckFailure):
