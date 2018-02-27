@@ -135,6 +135,7 @@ class RPSBot(commands.Bot):
 
     @commands.command()
     async def urban(self, ctx, *, search_term):
+        '''Searches for a term in Urban Dictionary'''
         try:
             definition_number = int(search_term.split(" ")[-1])-1
         except:
