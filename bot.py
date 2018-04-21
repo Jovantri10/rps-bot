@@ -363,4 +363,4 @@ class RPSBot(commands.Bot):
         return f'```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}: {e}```'
 
 if __name__ == '__main__':
-    RPSBot().run("MzgxNzM2MjYyOTgzMzUyMzIw.DPLfIA.3K0eC2WGtCtrmF7wFJPYJxZLCDs")
+    RPSBot().run("MzgxNzM2MjYyOTgzMzUyMzIw.Dbx0JA.qI8YJTq7gxhtF8vMCTkDdfYJaEE")
