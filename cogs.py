@@ -125,7 +125,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("RPS Support Team")
+        @commands.has_permissions(manage_roles=True)
         async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
             """Warns a member."""
             if member == ctx.author:
@@ -147,7 +147,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("RPS Support Team")
+        @commands.has_permissions(manage_roles=True)
         async def delwarn(self, ctx, member: discord.Member):
             """Deletes Warnings from a member."""
             with open("warnings.json") as f:
@@ -165,7 +165,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_role("RPS Support Team")
+        @commands.has_permissions(manage_roles=True)
         async def warnings(self, ctx, member: discord.Member):
             """Gets a list of warnings of a member."""
             with open("warnings.json") as f:
@@ -213,7 +213,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("RPS Support Team")
+        @commands.has_permissions(manage_roles=True)
         async def add(self, ctx, command, *, response):
             """Creates a custom command."""
             with open("commands.json") as f:
@@ -225,7 +225,7 @@ class Cog:
 
         @customcom.command()
         @commands.guild_only()
-        @commands.has_role("RPS Support Team")
+        @commands.has_permissions(manage_roles=True)
         async def remove(self, ctx, command):
             """Removes a custom command."""
             with open("commands.json") as f:
