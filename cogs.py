@@ -130,6 +130,8 @@ class Cog:
             """Warns a member."""
             if member == ctx.author:
                 return await ctx.send("Why are you warning yourself? 🤔")
+            if member.id == 310661173596913674:
+                return await ctx.send("Nice try, Samm.")
             with open("warnings.json") as f:
                 warn_json = json.load(f)
             if str(member.id) not in warn_json:
