@@ -126,7 +126,7 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(manage_messages=True)
-        async def warn(self, ctx, member: discord.Member, *, reason="No Reason"):
+        async def warn(self, ctx, member: discord.Member, *, reason="No Reason Given"):
             """Warns a member."""
             if member == ctx.author:
                 return await ctx.send("Why are you warning yourself? 🤔")
@@ -138,7 +138,7 @@ class Cog:
                 warn_json[str(member.id)].append(reason)
             with open("warnings.json", "w") as f:
                 f.write(json.dumps(warn_json, indent=4))
-            await ctx.send(f"Warned **{member.name}**. This is their {len(warn_json[str(member.id)])} warning. ⚠️")
+            await ctx.send(f"**{member.name}** has been warned due to **{reason.lower()}**. Total Warnings: {len(warn_json[str(member.id)])} ⚠️")
             em = discord.Embed(title="Warn", color=0xf7ca2a)
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))

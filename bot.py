@@ -51,7 +51,7 @@ class RPSBot(commands.Bot):
         await discord.utils.get(member.guild.text_channels, name="welcome").send(f"Hello {member.mention}! Welcome to **{member.guild.name}**! Please read <#{discord.utils.get(member.guild.text_channels, name='roles').id}> in order to access our channels! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
-        await discord.utils.get(member.guild.text_channels, name="welcome").send(f"**{member.name}** just left Royale Prestige Series. Bye Felicia! 👋")
+        await discord.utils.get(member.guild.text_channels, name="welcome").send(f"**{member.name}** just left {member.guild.name}. Bye Felicia! 👋")
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.errors.CheckFailure):
