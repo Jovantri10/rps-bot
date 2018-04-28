@@ -73,7 +73,7 @@
   },
   {
     "code": "bn",
-    "name": "Bengali; Bangla"
+    "name": "Bengali"
   },
   {
     "code": "bh",
@@ -101,7 +101,7 @@
   },
   {
     "code": "ca",
-    "name": "Catalan; Valencian"
+    "name": "Catalan"
   },
   {
     "code": "ch",
@@ -113,7 +113,7 @@
   },
   {
     "code": "ny",
-    "name": "Chichewa; Chewa; Nyanja"
+    "name": "Chichewa"
   },
   {
     "code": "zh",
@@ -149,7 +149,7 @@
   },
   {
     "code": "dv",
-    "name": "Divehi; Dhivehi; Maldivian;"
+    "name": "Divehi"
   },
   {
     "code": "nl",
@@ -193,7 +193,7 @@
   },
   {
     "code": "ff",
-    "name": "Fula; Fulah; Pulaar; Pular"
+    "name": "Fula"
   },
   {
     "code": "gl",
@@ -221,7 +221,7 @@
   },
   {
     "code": "ht",
-    "name": "Haitian; Haitian Creole"
+    "name": "Haitian"
   },
   {
     "code": "ha",
@@ -565,7 +565,7 @@
   },
   {
     "code": "gd",
-    "name": "Scottish Gaelic; Gaelic"
+    "name": "Gaelic"
   },
   {
     "code": "sn",
@@ -597,7 +597,7 @@
   },
   {
     "code": "es",
-    "name": "Spanish; Castilian"
+    "name": "Spanish"
   },
   {
     "code": "su",
@@ -637,7 +637,7 @@
   },
   {
     "code": "bo",
-    "name": "Tibetan Standard, Tibetan, Central"
+    "name": "Tibetan"
   },
   {
     "code": "tk",
