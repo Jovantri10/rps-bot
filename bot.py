@@ -19,9 +19,7 @@ class RPSBot(commands.Bot):
             ["🇮🇹", 390820130109652992],
             ["🇫🇷", 412266663317078016],
             ["🇩🇪", 390820128964608002],
-            ["🇯🇵", 424607663800713216],
-            ["🇨🇳", 390820477641424896],
-            ["🇮🇳", 390820418384297984]
+            ["🇵🇹", 390820477641424896]
         ]
         self.get_roles_region = [
             ["🇺🇸", 393226619579400193],
@@ -60,26 +58,38 @@ class RPSBot(commands.Bot):
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
 
     async def on_raw_reaction_add(self, payload):
-        guild = discord.utils.get(self.guilds, id=payload.guild_id)
-        user = discord.utils.get(guild.members, id=payload.user_id)
-        if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
-            await user.add_roles(discord.utils.get(guild.roles, id=393217384112193557))
-        elif payload.message_id == self.role_message_ids[1]:
-            for role in self.get_roles_region:
-                if str(payload.emoji) == role[0]:
-                    await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
-                    await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
-        elif payload.message_id == self.role_message_ids[2]:
-            for role in self.get_roles_lang:
-                if str(payload.emoji) == role[0]:
-                    await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
+        if payload.guild_id == 390788953025806336:
+            guild = discord.utils.get(self.guilds, id=payload.guild_id)
+            user = discord.utils.get(guild.members, id=payload.user_id)
+            if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
+                await user.add_roles(discord.utils.get(guild.roles, id=393217384112193557))
+            elif payload.message_id == self.role_message_ids[1]:
+                for role in self.get_roles_region:
+                    if str(payload.emoji) == role[0]:
+                        await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
+                        await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
+            elif payload.message_id == self.role_message_ids[2]:
+                for role in self.get_roles_lang:
+                    if str(payload.emoji) == role[0]:
+                        await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
+
+    async def on_raw_reaction_remove(self, payload):
+        if payload.guild_id == 390788953025806336:
+            guild = discord.utils.get(self.guilds, id=payload.guild_id)
+            user = discord.utils.get(guild.members, id=payload.user_id)
+            if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
+                await user.remove_roles(discord.utils.get(guild.roles, id=393217384112193557))
+            elif payload.message_id == self.role_message_ids[1]:
+                await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
+            elif payload.message_id == self.role_message_ids[2]:
+                for role in self.get_roles_lang:
+                    if str(payload.emoji) == role[0]:
+                        await user.remove_roles(discord.utils.get(guild.roles, id=role[1]))
             
 
     async def on_member_join(self, member):
         try:
             await member.add_roles(discord.utils.get(member.guild.roles, id=388471876013391886))
-        except:
-            await member.add_roles(discord.utils.get(member.guild.roles, id=393217384112193557))
         await discord.utils.get(member.guild.text_channels, name="welcome").send(f"Hello {member.mention}! Welcome to **{member.guild.name}**! Please read <#{discord.utils.get(member.guild.text_channels, name='roles').id}> in order to access our channels! We hope you enjoy your time here! 😃")
 
     async def on_member_remove(self, member):
