@@ -1,4 +1,4 @@
-import discord
+import discord, mtranslate
 from discord.ext import commands
 from contextlib import redirect_stdout
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json, urbanasync
@@ -298,8 +298,18 @@ class RPSBot(commands.Bot):
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
 
-        
-        
+    @commands.command()
+    async def translate(self, ctx, language, *, message):
+        with open("langcodes.json") as f:
+            langcodes = json.load(f)
+        for lang_test in langcodes:
+            if language.title() == lang_test["name"] or language.lower() == lang_test["code"]:
+                lang_set = lang_test
+                break
+        try:
+            await ctx.send(embed=discord.Embed(color=0x181818, title=f"Translated from {lang_test['name']}", description=mtranslate.translate(message, lang_set["code"], "auto")))
+        except:
+            await ctx.send("That isn't a valid language!")
 
     @commands.command(pass_context=True, hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str, edit=False):
