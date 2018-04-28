@@ -46,7 +46,7 @@ class RPSBot(commands.Bot):
 
     async def on_reaction_add(self, reaction, user):
         if reaction.message.id == self.role_message_ids[0] and reaction.emoji.id == 429157195117232128:
-            await user.add_roles([discord.utils.get(user.guild.roles, id=393217384112193557)])
+            await user.add_roles(discord.utils.get(user.guild.roles, id=393217384112193557))
             
 
     async def on_member_join(self, member):
