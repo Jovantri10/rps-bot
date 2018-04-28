@@ -12,6 +12,7 @@ class RPSBot(commands.Bot):
         self._last_result = None
         self.urban_client = urbanasync.Client(session=self.session)
         self.maintenance = False
+        self.role_message_ids = [436956683676155944, 436956972382814210, 436957697016070164]
 
     def paginate(self, text: str):
         '''Simple generator that paginates text.'''
@@ -42,6 +43,11 @@ class RPSBot(commands.Bot):
         perms = discord.Permissions.none()
         perms.administrator = True
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
+
+    async def on_reaction_add(self, reaction, user):
+        if reaction.message.id == self.role_message_ids[0] and reaction.emoji.id == 429157195117232128:
+            await user.add_roles([discord.utils.get(user.guild.roles, id=393217384112193557)])
+            
 
     async def on_member_join(self, member):
         try:
