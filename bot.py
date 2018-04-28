@@ -50,7 +50,7 @@ class RPSBot(commands.Bot):
         if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
             await user.add_roles(discord.utils.get(guild.roles, id=393217384112193557))
         elif payload.message_id == self.role_message_ids[1]:
-            print(payload.emoji)
+            print(dir(payload.emoji))
         #     if payload.emoji == "🇺🇸":
         #         await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
         #         await user.add_roles(discord.utils.get(guild.roles, id=393226619579400193))
