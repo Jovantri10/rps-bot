@@ -24,6 +24,12 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
+        @commands.has_permissions(manage_messages=True)
+        async def say(self, ctx, *, message):
+            await ctx.send(message)
+
+        @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(kick_members=True)
         async def kick(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Kicks a member'''
