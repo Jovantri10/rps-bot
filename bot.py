@@ -45,8 +45,9 @@ class RPSBot(commands.Bot):
         print(f"Bot is ready! Invite: {discord.utils.oauth_url(self.user.id, perms)}")
 
     async def on_raw_reaction_add(self, payload):
-        if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
-            await user.add_roles(discord.utils.get(user.guild.roles, id=393217384112193557))
+        print(dir(payload))
+        # if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
+        #     await payload..add_roles(discord.utils.get(user.guild.roles, id=393217384112193557))
             
 
     async def on_member_join(self, member):
