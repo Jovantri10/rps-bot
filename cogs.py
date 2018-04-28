@@ -30,6 +30,33 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
+        @commands.has_permissions(manage_messages=True)
+        async def poll(self, ctx, *, poll):
+            '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices.'''
+            nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+            numlist = []
+            for emoji in self.get_guild(283574126029832195).emojis:
+                if emoji.name in nums:
+                    numlist.append(emoji)
+            choices = poll.split('|')
+            question = choices[0]
+            choices.pop(0)
+            em = discord.Embed(color=0x181818, title='Poll')
+            em.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url)
+            question_list = [f"{numlist[n]} {choice}" for n,choice in enumerate(choices)]
+            em.description = f'**{question}**\n\n' + '\n'.join(question_list)
+            sent_message = await ctx.send(embed=em)
+            for n in range(len(choices)):
+                await sent_message.add_reaction(numlist[n])
+            await asyncio.sleep(5)
+            sent_message = await ctx.channel.get_message(sent_message.id)
+            em.title = f"Results!"
+            reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1, reverse=True)
+            em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
+            await ctx.send(embed=em)
+
+        @commands.command()
+        @commands.guild_only()
         @commands.has_permissions(kick_members=True)
         async def kick(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Kicks a member'''
