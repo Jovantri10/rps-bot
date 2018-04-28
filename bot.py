@@ -77,11 +77,11 @@ class RPSBot(commands.Bot):
         if payload.guild_id == 390788953025806336:
             guild = discord.utils.get(self.guilds, id=payload.guild_id)
             user = discord.utils.get(guild.members, id=payload.user_id)
-            if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
+            if payload.message_id == self.role_message_ids[0][0] and payload.emoji.id == 429157195117232128:
                 await user.remove_roles(discord.utils.get(guild.roles, id=393217384112193557))
-            elif payload.message_id == self.role_message_ids[1]:
+            elif payload.message_id == self.role_message_ids[0][1]:
                 await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
-            elif payload.message_id == self.role_message_ids[2]:
+            elif payload.message_id == self.role_message_ids[0][2]:
                 for role in self.get_roles_lang:
                     if str(payload.emoji) == role[0]:
                         await user.remove_roles(discord.utils.get(guild.roles, id=role[1]))
