@@ -12,7 +12,7 @@ class RPSBot(commands.Bot):
         self._last_result = None
         self.urban_client = urbanasync.Client(session=self.session)
         self.maintenance = False
-        self.role_message_ids = [[439687780264837121, 439688026269155339, 439688110318813184]]
+        self.role_message_ids = [[439690468658249739, 439690641400791050, 439690684618768395]]
         self.get_roles_lang = [
             ["🇬🇧", 390820109620477952],
             ["🇪🇸", 390820111310651395],
