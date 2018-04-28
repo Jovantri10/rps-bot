@@ -356,9 +356,10 @@ class Cog:
         @commands.group(invoke_without_command=True)
         @commands.guild_only()
         async def bank(self, ctx):
+            """Do !bank register to create an account, or !bank delete to delete it."""
             return
 
-        @bank.command()
+        @bank.command(hidden=True)
         @commands.guild_only()
         async def delete(self, ctx):
             """Deletes your account."""
@@ -371,7 +372,7 @@ class Cog:
                 f.write(json.dumps(economy_dict, indent=4))
             await ctx.send("Account deleted.")
 
-        @bank.command()
+        @bank.command(hidden=True)
         @commands.guild_only()
         async def register(self, ctx):
             """Creates an account."""
