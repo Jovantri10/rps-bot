@@ -13,6 +13,21 @@ class RPSBot(commands.Bot):
         self.urban_client = urbanasync.Client(session=self.session)
         self.maintenance = False
         self.role_message_ids = [436956683676155944, 436956972382814210, 436957697016070164]
+        self.get_roles_lang = [
+            ["🇬🇧", 390820109620477952],
+            ["🇪🇸", 390820111310651395],
+            ["🇮🇹", 390820130109652992],
+            ["🇫🇷", 412266663317078016],
+            ["🇩🇪", 390820128964608002],
+            ["🇯🇵", 424607663800713216],
+            ["🇨🇳", 390820477641424896],
+            ["🇮🇳", 390820418384297984]
+        ]
+        self.get_roles_region = [
+            ["🇺🇸", 393226619579400193],
+            ["🇬🇧", 393226622247108621],
+            ["🇦🇺", 393226625333985280]
+        ]
 
     def paginate(self, text: str):
         '''Simple generator that paginates text.'''
@@ -50,17 +65,14 @@ class RPSBot(commands.Bot):
         if payload.message_id == self.role_message_ids[0] and payload.emoji.id == 429157195117232128:
             await user.add_roles(discord.utils.get(guild.roles, id=393217384112193557))
         elif payload.message_id == self.role_message_ids[1]:
-            if str(payload.emoji) == "🇺🇸":
-                await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
-                await user.add_roles(discord.utils.get(guild.roles, id=393226619579400193))
-            elif str(payload.emoji) == "🇬🇧":
-                await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
-                await user.add_roles(discord.utils.get(guild.roles, id=393226622247108621))
-            elif str(payload.emoji) == "🇦🇺":
-                await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
-                await user.add_roles(discord.utils.get(guild.roles, id=393226625333985280))
-        # # elif payload.message_id == self.role_message_ids[2]:
-
+            for role in self.get_roles_region:
+                if str(payload.emoji) == role[0]:
+                    await user.remove_roles(discord.utils.get(guild.roles, id=393226619579400193), discord.utils.get(guild.roles, id=393226622247108621), discord.utils.get(guild.roles, id=393226625333985280))
+                    await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
+        elif payload.message_id == self.role_message_ids[2]:
+            for role in self.get_roles_lang:
+                if str(payload.emoji) == role[0]:
+                    await user.add_roles(discord.utils.get(guild.roles, id=role[1]))
             
 
     async def on_member_join(self, member):
