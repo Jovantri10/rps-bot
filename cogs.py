@@ -51,7 +51,7 @@ class Cog:
             await asyncio.sleep(5)
             sent_message = await ctx.channel.get_message(sent_message.id)
             em.title = f"Results!"
-            reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1, reverse=True)
+            reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1)
             em.description = f'**{question}**\n\n' + '\n'.join([f"{numlist[n]} {choice} - **{reactions[n].count-1} votes**" for n,choice in enumerate(choices)])
             await ctx.send(embed=em)
 
