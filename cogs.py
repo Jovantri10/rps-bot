@@ -31,8 +31,8 @@ class Cog:
         @commands.command()
         @commands.guild_only()
         @commands.has_permissions(manage_messages=True)
-        async def poll(self, ctx, *, poll):
-            '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices.'''
+        async def poll(self, ctx, *, time : int, poll):
+            '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices. Time is in seconds.'''
             nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
             numlist = []
             for emoji in self.bot.get_guild(283574126029832195).emojis:
@@ -48,7 +48,7 @@ class Cog:
             sent_message = await ctx.send(embed=em)
             for n in range(len(choices)):
                 await sent_message.add_reaction(numlist[n])
-            await asyncio.sleep(5)
+            await asyncio.sleep(int(time))
             sent_message = await ctx.channel.get_message(sent_message.id)
             em.title = f"Results!"
             reactions = sorted(sent_message.reactions, key=lambda x: numlist.index(x.emoji)+1)
