@@ -35,7 +35,7 @@ class Cog:
             '''Start a poll. Format it like this: question|choice|choice.... Can hold a max of 10 choices.'''
             nums = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
             numlist = []
-            for emoji in self.get_guild(283574126029832195).emojis:
+            for emoji in self.bot.get_guild(283574126029832195).emojis:
                 if emoji.name in nums:
                     numlist.append(emoji)
             choices = poll.split('|')
