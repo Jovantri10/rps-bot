@@ -285,7 +285,7 @@ class RPSBot(commands.Bot):
                 member_str += "\n"
         await ctx.send(embed=discord.Embed(color=role.color, title=role.name, description=member_str))
 
-    @commands.command()
+    @commands.command(aliases=["t"])
     async def translate(self, ctx, language, *, message):
         with open("langcodes.json") as f:
             langcodes = json.load(f)
@@ -294,7 +294,7 @@ class RPSBot(commands.Bot):
                 lang_set = lang_test
                 break
         try:
-            await ctx.send(embed=discord.Embed(color=0x181818, title=f"Translated from {lang_test['name']}", description=mtranslate.translate(message, lang_set["code"], "auto")))
+            await ctx.send(embed=discord.Embed(color=0x181818, title=f"Translated to {lang_test['name']}", description=mtranslate.translate(message, lang_set["code"], "auto")))
         except:
             await ctx.send("That isn't a valid language!")
 
