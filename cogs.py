@@ -72,7 +72,7 @@ class Cog:
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
             em.add_field(name="Reason", value=reason, inline=False)
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
 
         @commands.command()
@@ -92,7 +92,7 @@ class Cog:
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
             em.add_field(name="Reason", value=reason, inline=False)
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
 
         @commands.command()
@@ -112,7 +112,7 @@ class Cog:
             em = discord.Embed(title="Unban", color=0x3ace00)
             em.add_field(name="User", value=str(user.user))
             em.add_field(name="Moderator", value=str(ctx.author))
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
 
         @commands.command(aliases=['clear'])
@@ -138,7 +138,7 @@ class Cog:
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
             em.add_field(name="Reason", value=reason, inline=False)
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
         @commands.command()
         @commands.guild_only()
@@ -154,7 +154,7 @@ class Cog:
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
             em.add_field(name="Reason", value=reason, inline=False)
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
         @commands.command()
         @commands.guild_only()
@@ -178,7 +178,7 @@ class Cog:
             em.add_field(name="User", value=str(member))
             em.add_field(name="Moderator", value=str(ctx.author))
             em.add_field(name="Reason", value=reason, inline=False)
-            await ctx.guild.get_channel(383849511920861185).send(embed=em)
+            await discord.utils.get(ctx.guild.text_channels, name="audit_log").send(embed=em)
 
         @commands.command()
         @commands.guild_only()
