@@ -190,7 +190,7 @@ class Cog:
             if str(member.id) not in warn_json:
                 return await ctx.send(f"**{member}** doesn't have any warnings!")
             if len(warn_json[str(member.id)]) == 1:
-                warn_json = {key: value for key, value in warn_json.items() if key is not str(member.id)}
+                warn_json = {key: value for key, value in warn_json.items() if key != str(member.id)}
             else:
                 warn_json[str(member.id)] = warn_json[str(member.id)][:-1]
             with open("warnings.json", "w") as f:
