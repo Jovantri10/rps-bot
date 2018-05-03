@@ -126,7 +126,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_permissions(mute_members=True)
+        @commands.has_permissions(manage_messages=True)
         async def unmute(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Unmutes a user. He/she will finally be able to talk!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
@@ -142,7 +142,7 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        @commands.has_permissions(mute_members=True)
+        @commands.has_permissions(manage_messages=True)
         async def mute(self, ctx, member:discord.Member, *, reason="No Reason"):
             '''Mutes a user. What else did you think this did?!'''
             muted = discord.utils.get(ctx.guild.roles, name='Muted')
