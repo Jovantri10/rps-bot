@@ -303,6 +303,7 @@ class RPSBot(commands.Bot):
 
     @commands.command(aliases=["t"])
     async def translate(self, ctx, language, *, message):
+        """Translate messages into different languages."""
         with open("langcodes.json") as f:
             langcodes = json.load(f)
         for lang_test in langcodes:
