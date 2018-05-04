@@ -3,6 +3,7 @@ from discord.ext import commands
 from contextlib import redirect_stdout
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json, urbanasync
 from cogs import Cog
+import random
 
 class RPSBot(commands.Bot):
 
@@ -113,6 +114,21 @@ class RPSBot(commands.Bot):
             message_str = message.content.replace("!", "").split(" ")[0]
             if message_str in comms:
                 await message.channel.send(comms[message_str])
+
+    @commands.command()
+    async def thanos(self, ctx):
+        '''Will you be killed off by Thanos?'''
+        with open("thanos.json") as f:
+            than_list = json.load(f)
+        if str(ctx.author.id) not in than_list.keys():
+            destiny = random.randint(0,1)
+            if destiny == 0:
+                than_list[str(ctx.author.id)] = "You were killed by Thanos."
+            else:
+                than_list[str(ctx.author.id)] = "You were spared by Thanos."
+            with open("thanos.json") as f:
+                f.write(json.dumps(than_list, indent=4))
+        await ctx.send(than_list[str(ctx.author.id)])
 
     @commands.command()
     @commands.guild_only()
