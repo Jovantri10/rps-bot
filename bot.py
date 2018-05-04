@@ -126,7 +126,7 @@ class RPSBot(commands.Bot):
                 than_list[str(ctx.author.id)] = "You were killed by Thanos."
             else:
                 than_list[str(ctx.author.id)] = "You were spared by Thanos."
-            with open("thanos.json") as f:
+            with open("thanos.json", "w") as f:
                 f.write(json.dumps(than_list, indent=4))
         await ctx.send(than_list[str(ctx.author.id)])
 
