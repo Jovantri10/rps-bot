@@ -154,33 +154,6 @@ class RPSBot(commands.Bot):
         await ctx.author.add_roles(found_role)
         await ctx.send("Region set. 👍")
 
-    @commands.command()
-    @commands.guild_only()
-    async def language(self, ctx, *, name):
-        '''The available languages are: `English`, `Spanish`, `French`, `German`, and `Chinese`. You could also use `clear` to clear your language setting.'''
-        name = name.lower()
-        regions = ['english', 'spanish', 'french', 'german', 'chinese', 'clear']
-        if name == 'en':
-            name = 'english'
-        if name == 'es':
-            name = 'spanish'
-        if name == 'fr':
-            name = 'french'
-        if name == 'de':
-            name = 'german'
-        if name == 'zh':
-            name = 'chinese'
-        if name not in regions:
-            return await ctx.send("The available languages are: `English`, `Spanish`, `French`, `German`, and `Chinese`. You could also use `clear` to clear your language setting.")
-        for role in ctx.author.roles:
-            if role.name.lower() in regions:
-                await ctx.author.remove_roles(role)
-        if name == 'clear':
-            return await ctx.send('Language cleared. 👍')
-        found_role = discord.utils.get(ctx.guild.roles, name=name.title())
-        await ctx.author.add_roles(found_role)
-        await ctx.send("Language set. 👍")
-
     @commands.command(aliases=["ui"])
     async def userinfo(self, ctx, user:discord.Member=None):
         """Gets a user info. Defaults to the user who called the command."""
