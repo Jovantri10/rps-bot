@@ -213,7 +213,6 @@ class RPSBot(commands.Bot):
             em = discord.Embed(title='Help', color=0x181818)
             em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
             em.add_field(name=cog.__name__, value="```\n"+'\n\n'.join([f"{ctx.prefix}{attr.name}{' '*(15-len(attr.name))}{attr.short_doc}" for name, attr in inspect.getmembers(cog) if isinstance(attr, commands.Command)])+'\n```')
-            em.set_footer(text="Type !help command for more info on a command.")
             ems.append(em)
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
@@ -225,9 +224,8 @@ class RPSBot(commands.Bot):
         em = discord.Embed(title='Help', color=0x181818)
         em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(comms)+"\n```")
-        em.set_footer(text="Type !help command for more info on a command.")
         ems.append(em)
-        session = PaginatorSession(ctx=ctx, pages=ems)
+        session = PaginatorSession(ctx=ctx, pages=ems, footer="Type !help command for more info on a command.")
         await session.run()
 
     @commands.command(aliases=['si'])
