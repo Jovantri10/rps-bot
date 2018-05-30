@@ -4,6 +4,7 @@ from contextlib import redirect_stdout
 import inspect, aiohttp, asyncio, io, textwrap, traceback, os, json, urbanasync
 from cogs import Cog
 import random
+from paginator import PaginatorSession
 
 class RPSBot(commands.Bot):
 
@@ -205,22 +206,29 @@ class RPSBot(commands.Bot):
     @commands.command(name='help')
     async def _help(self, ctx, command=None):
         '''Shows this page'''
-        em = discord.Embed(title='Help', color=0x181818)
+        ems = []
         for cog in Cog.all_cogs(Cog):
             if cog.__name__ == "ReactWait":
                 continue
+            em = discord.Embed(title='Help', color=0x181818)
+            em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
             em.add_field(name=cog.__name__, value="```\n"+'\n\n'.join([f"{ctx.prefix}{attr.name}{' '*(15-len(attr.name))}{attr.short_doc}" for name, attr in inspect.getmembers(cog) if isinstance(attr, commands.Command)])+'\n```')
+            em.set_footer(text="Type !help command for more info on a command.")
+            ems.append(em)
         if command:
             command = discord.utils.get(self.commands, name=command.lower())
             return await ctx.send(embed=discord.Embed(color=0x181818, title=f"``{ctx.prefix}{command.signature}``", description=command.short_doc))
-        em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         comms = []
         for command in self.commands:
             if command.cog_name == "RPSBot" and not command.hidden:
                 comms.append(f"{ctx.prefix}{command.name}{' '*(15-len(command.name))}{command.short_doc}")
+        em = discord.Embed(title='Help', color=0x181818)
+        em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(comms)+"\n```")
         em.set_footer(text="Type !help command for more info on a command.")
-        await ctx.send(embed=em)
+        ems.append(em)
+        session = PaginatorSession(ctx=ctx, pages=ems)
+        await session.run()
 
     @commands.command(aliases=['si'])
     @commands.guild_only()
