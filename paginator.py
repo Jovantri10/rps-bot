@@ -103,8 +103,8 @@ class PaginatorSession:
                     break
             try:
                 await self.base.remove_reaction(reaction, user)
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
             show_page = self.reaction_map.get(reaction.emoji)
 
