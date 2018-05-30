@@ -225,7 +225,7 @@ class RPSBot(commands.Bot):
         em.set_author(name='Royale Prestige Series', icon_url=self.user.avatar_url)
         em.add_field(name="Bot Related", value=f"```\n"+'\n\n'.join(comms)+"\n```")
         ems.append(em)
-        session = PaginatorSession(ctx=ctx, pages=ems, footer="Type !help command for more info on a command.")
+        session = PaginatorSession(ctx=ctx, pages=ems, footer_text="Type !help command for more info on a command.")
         await session.run()
 
     @commands.command(aliases=['si'])
