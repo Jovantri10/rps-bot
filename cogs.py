@@ -312,9 +312,9 @@ class Cog:
                 return await ctx.send("Already joined a voice channel!")
             try:
                 self.vc = await ctx.author.voice.channel.connect()
-            except Exception as e:
-                print(e)
-                return await ctx.send("You're not in a voice channel!")
+            # except Exception as e:
+            #     raise(e)
+            #     return await ctx.send("You're not in a voice channel!")
             await ctx.send("Joined the music channel.")
 
         @commands.command()
