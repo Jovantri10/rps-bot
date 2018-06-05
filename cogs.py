@@ -408,7 +408,7 @@ class Cog:
             while self.vc:
                 await self.play_song(ctx)
                 try:
-                    if len(discord.utils.get(ctx.guild.channels, id=self.vc.id).members) <= 1:
+                    if len(self.vc.channel.members) <= 1:
                         await self.vc.disconnect()
                         self.vc = None
                         return await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
@@ -639,9 +639,3 @@ class Cog:
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
             return await ctx.send(embed=em)
-            
-                            
-
-
-
-
