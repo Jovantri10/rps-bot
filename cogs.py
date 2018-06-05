@@ -356,7 +356,7 @@ class Cog:
                     return await ctx.send("There aren't any search results.")
 
             name_file = []
-            for word in name.split(" ", "'"):
+            for word in re.split(" |'", name):
                 print(word[-1])
                 if "".join(ch for ch in word if ch.isalnum()) != "":
                     name_file.append("".join(ch for ch in word if ch.isalnum()))
