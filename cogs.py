@@ -311,12 +311,12 @@ class Cog:
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             if self.vc:
                 return await ctx.send("Already joined a voice channel!")
-            # try:
-            self.vc = await ctx.author.voice.channel.connect()
-            # except Exception as e:
-            #     pass
-            #     raise(e)
-            #     return await ctx.send("You're not in a voice channel!")
+            try:
+                self.vc = await ctx.author.voice.channel.connect()
+            except Exception as e:
+                pass
+                raise(e)
+                return await ctx.send("You're not in a voice channel!")
             await ctx.send("Joined the music channel.")
 
         @commands.command()
@@ -358,6 +358,10 @@ class Cog:
             for word in re.findall(r"[\w']+", name):
                 if "".join(ch for ch in word if ch.isalnum()) != "":
                     name_file.append("".join(ch for ch in word if ch.isalnum()))
+                if word[:-1] == ":":
+                    name_file.append("-")
+                if word[:-1] == ".":
+                    name_file[-1] += "."
 
             if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
                 ydl_opts = {
