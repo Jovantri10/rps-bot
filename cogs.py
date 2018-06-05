@@ -294,6 +294,25 @@ class Cog:
                 return False
             return vid[0]['snippet']['title']
 
+        async def play(self, name, name_file, url):
+            if self.vc:
+                with open("queue.json") as f:
+                    queue = json.load(f)
+                if
+                try:
+                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play())
+                except Exception as e:
+                    if str(e) == "'NoneType' object has no attribute 'play'":
+                        return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
+                    elif str(e) == "Already playing audio.":
+                        return await ctx.send("The bot is already playing something. Wait till the song is finished.")
+                    else:
+                        return await ctx.send(str(e))
+                await ctx.send(f"Playing {queue[0]}")
+                queue.pop(0)
+                with open("queue.json", "w") as f:
+                    f.write(json.dumps(queue, indent=4))
+
         class Logger():
             def debug(self, msg):
                 pass
@@ -342,62 +361,61 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        async def play(self, ctx, *, video):
+        async def play(self, ctx, *, video=None):
             """Play some tunes 🎵"""
-            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch") or video.startswith("https://www.youtube.com/watch") or video.startswith("http://www.youtube.com/watch"):
-                url = video
-                name = await self.get_name_from_vid(video)
-                if not name:
-                    return await ctx.send("That's not a valid url!")
-            else:
-                url, name = await self.get_results(video)
-                if not url:
-                    return await ctx.send("There aren't any search results.")
+            if video:
+                if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch") or video.startswith("https://www.youtube.com/watch") or video.startswith("http://www.youtube.com/watch"):
+                    url = video
+                    name = await self.get_name_from_vid(video)
+                    if not name:
+                        return await ctx.send("That's not a valid url!")
+                else:
+                    url, name = await self.get_results(video)
+                    if not url:
+                        return await ctx.send("There aren't any search results.")
 
-            name_file = []
-            for word in re.split(" |'", name):
-                print(word[-1])
-                if "".join(ch for ch in word if ch.isalnum()) != "":
-                    name_file.append("".join(ch for ch in word if ch.isalnum()))
-                if word[-1] == ":":
-                    name_file.append("-")
-                if word[-1] == ".":
-                    name_file[-1] += "."
-                if word == "-":
-                    name_file.append("-")
+                name_file = []
+                for word in re.split(" |'", name):
+                    print(word[-1])
+                    if "".join(ch for ch in word if ch.isalnum()) != "":
+                        name_file.append("".join(ch for ch in word if ch.isalnum()))
+                    if word[-1] == ":":
+                        name_file.append("-")
+                    if word[-1] == ".":
+                        name_file[-1] += "."
+                    if word == "-":
+                        name_file.append("-")
 
-            if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
-                ydl_opts = {
-                    'format': 'bestaudio/best',
-                    'postprocessors': [{
-                        'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'mp3',
-                        'preferredquality': '192',
-                    }],
-                    'logger': self.Logger()
-                }
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([url])
+                if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
+                    ydl_opts = {
+                        'format': 'bestaudio/best',
+                        'postprocessors': [{
+                            'key': 'FFmpegExtractAudio',
+                            'preferredcodec': 'mp3',
+                            'preferredquality': '192',
+                        }],
+                        'logger': self.Logger()
+                    }
+                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                        ydl.download([url])
+                with open("queue.json") as f:
+                    queue = json.load(f)
+                queue.append([name, name_file, url])
+                with open("queue.json", "w") as f:
+                    f.write(json.dumps(queue), indent=4)
+
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
-            try:
-                self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3'))
-            except Exception as e:
-                if str(e) == "'NoneType' object has no attribute 'play'":
-                    return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
-                elif str(e) == "Already playing audio.":
-                    return await ctx.send("The bot is already playing something. Wait till the song is finished.")
-                else:
-                    return await ctx.send(str(e))
-            await ctx.send(f"Playing {name}")
             while self.vc:
+                await self.play()
                 try:
                     if len(discord.utils.get(ctx.guild.channels, id=self.vc.id).members) <= 1:
                         await self.vc.disconnect()
                         self.vc = None
-                        await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
+                        return await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
                 except Exception as e:
                     print(e)
+                
 
     class Economy:
 
