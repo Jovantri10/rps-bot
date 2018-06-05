@@ -298,7 +298,7 @@ class RPSBot(commands.Bot):
     async def _eval(self, ctx, *, body: str, edit=False):
         """Evaluates python code"""
 
-        if ctx.author.id != 273381165229146112:
+        if ctx.author.id != 295368465005543424:
             return
 
         env = {
