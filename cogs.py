@@ -408,7 +408,7 @@ class Cog:
             while self.vc:
                 await self.play_song(ctx)
                 try:
-                    if len(self.vc.channel.members) <= 1:
+                    if len(discord.utils.get(ctx.guild.voice_channels, id=self.vc.channel.id).members) <= 1:
                         await self.vc.disconnect()
                         self.vc = None
                         return await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
