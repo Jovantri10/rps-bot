@@ -297,7 +297,7 @@ class Cog:
         def play_song(self, ctx):
             if self.vc:
                 with open("queue.json") as f:
-                    queue = json.load(f)
+                    queue = json.load(f)["queue"]
                 try:
                     self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song(ctx))
                 except Exception as e:
@@ -393,7 +393,7 @@ class Cog:
                         ydl.download([url])
                 with open("queue.json") as f:
                     queue = json.load(f)
-                queue.append([name, name_file, url])
+                queue["queue"].append([name, name_file, url])
                 with open("queue.json", "w") as f:
                     f.write(json.dumps(queue, indent=4))
 
