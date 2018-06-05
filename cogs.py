@@ -294,7 +294,7 @@ class Cog:
                 return False
             return vid[0]['snippet']['title']
 
-        async def play_song(self):
+        async def play_song(self, ctx):
             if self.vc:
                 with open("queue.json") as f:
                     queue = json.load(f)
@@ -406,7 +406,7 @@ class Cog:
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             while self.vc:
-                await self.play_song()
+                await self.play_song(ctx)
                 try:
                     if len(discord.utils.get(ctx.guild.channels, id=self.vc.id).members) <= 1:
                         await self.vc.disconnect()
