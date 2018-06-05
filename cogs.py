@@ -299,7 +299,7 @@ class Cog:
                 with open("queue.json") as f:
                     queue = json.load(f)
                 try:
-                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song())
+                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song(ctx))
                 except Exception as e:
                     if str(e) == "'NoneType' object has no attribute 'play'":
                         return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
