@@ -396,8 +396,8 @@ class Cog:
                         await self.vc.disconnect()
                         self.vc = None
                         await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
 
     class Economy:
 
