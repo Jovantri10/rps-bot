@@ -294,12 +294,12 @@ class Cog:
                 return False
             return vid[0]['snippet']['title']
 
-        async def play(self, name, name_file, url):
+        async def play_song(self, name, name_file, url):
             if self.vc:
                 with open("queue.json") as f:
                     queue = json.load(f)
                 try:
-                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play())
+                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song())
                 except Exception as e:
                     if str(e) == "'NoneType' object has no attribute 'play'":
                         return await ctx.send(f"The bot hasn't joined a voice channel yet! Do `{ctx.prefix}join` to join a voice channel.")
@@ -406,7 +406,7 @@ class Cog:
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
             while self.vc:
-                await self.play()
+                await self.play_song()
                 try:
                     if len(discord.utils.get(ctx.guild.channels, id=self.vc.id).members) <= 1:
                         await self.vc.disconnect()
