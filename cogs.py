@@ -344,7 +344,7 @@ class Cog:
         @commands.guild_only()
         async def play(self, ctx, *, video):
             """Play some tunes 🎵"""
-            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
+            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch") or video.startswith("https://www.youtube.com/watch") or video.startswith("http://www.youtube.com/watch"):
                 url = video
                 name = await self.get_name_from_vid(video)
                 print(name)
