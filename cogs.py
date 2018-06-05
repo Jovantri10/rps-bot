@@ -347,6 +347,7 @@ class Cog:
             if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch"):
                 url = video
                 name = await self.get_name_from_vid(video)
+                print(name)
                 if not name:
                     return await ctx.send("That's not a valid url!")
             else:
