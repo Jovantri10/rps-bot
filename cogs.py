@@ -364,6 +364,8 @@ class Cog:
                     name_file.append("-")
                 if word[-1] == ".":
                     name_file[-1] += "."
+                if word == "-":
+                    name_file.append("-")
 
             if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
                 ydl_opts = {
