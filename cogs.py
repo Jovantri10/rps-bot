@@ -401,7 +401,7 @@ class Cog:
                     queue = json.load(f)
                 queue.append([name, name_file, url])
                 with open("queue.json", "w") as f:
-                    f.write(json.dumps(queue), indent=4)
+                    f.write(json.dumps(queue, indent=4))
 
 
             discord.opus.load_opus(ctypes.util.find_library('opus'))
