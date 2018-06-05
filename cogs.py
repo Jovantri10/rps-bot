@@ -356,12 +356,13 @@ class Cog:
                     return await ctx.send("There aren't any search results.")
 
             name_file = []
-            for word in name.split(" "):
+            for word in name.split(" ", "'"):
+                print(word[-1])
                 if "".join(ch for ch in word if ch.isalnum()) != "":
                     name_file.append("".join(ch for ch in word if ch.isalnum()))
-                if word[:-1] == ":":
+                if word[-1] == ":":
                     name_file.append("-")
-                if word[:-1] == ".":
+                if word[-1] == ".":
                     name_file[-1] += "."
 
             if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
