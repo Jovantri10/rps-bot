@@ -298,7 +298,6 @@ class Cog:
             if self.vc:
                 with open("queue.json") as f:
                     queue = json.load(f)
-                if
                 try:
                     self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play())
                 except Exception as e:
