@@ -308,6 +308,7 @@ class Cog:
         @commands.guild_only()
         async def join(self, ctx):
             """Have the bot join the music channel."""
+            discord.opus.load_opus(ctypes.util.find_library('opus'))
             if self.vc:
                 return await ctx.send("Already joined a voice channel!")
             # try:
