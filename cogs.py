@@ -292,7 +292,7 @@ class Cog:
                 vid = data['items']
             if vid == []:
                 return False
-            return vid['items']['snippet']['title']
+            return vid['items'][0]['snippet']['title']
 
         class Logger():
             def debug(self, msg):
