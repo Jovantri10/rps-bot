@@ -391,6 +391,14 @@ class Cog:
                 else:
                     return await ctx.send(str(e))
             await ctx.send(f"Playing {name}")
+            while self.vc:
+                try:
+                    if len(discord.utils.get(ctx.guild.channels, id=self.vc.id).members) <= 1:
+                        await self.vc.disconnect()
+                        self.vc = None
+                        await ctx.send("I'm not sticking around if noone's listening to my sweet tunes.")
+                except:
+                    pass
 
     class Economy:
 
