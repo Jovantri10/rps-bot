@@ -287,7 +287,7 @@ class Cog:
 
         async def get_name_from_vid(self, video):
             vid_id = video.split("v=")[1]
-            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/video", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "id": vid_id}) as resp:
+            async with self.bot.session.get("https://www.googleapis.com/youtube/v3/videos", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "id": vid_id}) as resp:
                 data = await resp.json()
                 vid = data['items']
             if vid == []:
