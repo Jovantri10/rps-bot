@@ -294,7 +294,7 @@ class Cog:
                 return False
             return vid[0]['snippet']['title']
 
-        async def play_song(self, name, name_file, url):
+        async def play_song(self):
             if self.vc:
                 with open("queue.json") as f:
                     queue = json.load(f)
