@@ -397,13 +397,12 @@ class Cog:
 
             while self.vc:
                 if not self.vc.is_playing():
-                    print(self.queue)
                     if self.queue == []:
                         await self.vc.disconnect()
                         self.vc = None
                         return await ctx.send("Queue finished.")
                     try:
-                        self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'))
+                        self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(self.queue[0][1])}-{self.queue[0][2].split("v=")[1]}.mp3'))
                     except Exception as e:
                         print(e)
                     self.queue.pop(0)
