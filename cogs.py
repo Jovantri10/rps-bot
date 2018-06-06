@@ -419,7 +419,7 @@ class Cog:
                 f.write(json.dumps(economy_dict, indent=4))
             await ctx.send("Account registered.")
 
-        @commands.command()
+        @commands.command(aliases=["bj"])
         @commands.guild_only()
         async def blackjack(self, ctx, bid):
             """Play blackjack!"""
