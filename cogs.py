@@ -622,7 +622,7 @@ class Cog:
             tag = tag.upper()
             stats = await self.get_json(f"/player/{tag}")
             em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
-            em.add_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
+            em.set_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
             await ctx.send(embed=em)
 
         
