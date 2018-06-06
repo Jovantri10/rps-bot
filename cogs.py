@@ -304,19 +304,6 @@ class Cog:
 
             def error(self, msg):
                 print(msg)
-            
-        @commands.command()
-        @commands.guild_only()
-        async def join(self, ctx):
-            """Have the bot join the music channel."""
-            discord.opus.load_opus(ctypes.util.find_library('opus'))
-            if self.vc:
-                return await ctx.send("Already joined a voice channel!")
-            try:
-                self.vc = await ctx.author.voice.channel.connect()
-            except:
-                return await ctx.send("You're not in a voice channel!")
-            await ctx.send("Joined the music channel.")
 
         @commands.command()
         @commands.guild_only()
@@ -349,7 +336,6 @@ class Cog:
 
             name_file = []
             for word in re.split(" |'", name):
-                print(word[-1])
                 if "".join(ch for ch in word if ch.isalnum()) != "":
                     name_file.append("".join(ch for ch in word if ch.isalnum()))
                 if word[-1] == ":":

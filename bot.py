@@ -117,21 +117,6 @@ class RPSBot(commands.Bot):
                 await message.channel.send(comms[message_str])
 
     @commands.command()
-    async def thanos(self, ctx):
-        '''Will you be killed off by Thanos?'''
-        with open("thanos.json") as f:
-            than_list = json.load(f)
-        if str(ctx.author.id) not in than_list.keys():
-            destiny = random.randint(0,1)
-            if destiny == 0:
-                than_list[str(ctx.author.id)] = "You were killed by Thanos."
-            else:
-                than_list[str(ctx.author.id)] = "You were spared by Thanos."
-            with open("thanos.json", "w") as f:
-                f.write(json.dumps(than_list, indent=4))
-        await ctx.send(than_list[str(ctx.author.id)])
-
-    @commands.command()
     @commands.guild_only()
     async def region(self, ctx, *, name):
         '''The available regions are: `Americas`, `Europa`, and `Asia Pacific`. You could also use `clear` to clear your region setting.'''
