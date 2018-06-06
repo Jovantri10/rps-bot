@@ -397,6 +397,7 @@ class Cog:
 
             while self.vc:
                 if not self.vc.is_playing():
+                    print(self.queue)
                     if self.queue == []:
                         await self.vc.disconnect()
                         self.vc = None
