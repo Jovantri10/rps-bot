@@ -621,7 +621,7 @@ class Cog:
             stats = await self.get_json("/player/stats")
             em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
             em.add_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
-            await ctx.send(embed=discord.Embed)
+            await ctx.send(embed=em)
 
         
         
