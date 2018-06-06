@@ -542,7 +542,7 @@ class Cog:
                     return await ctx.send("He doesn't have an account in the RPS bank. Do `!bank register` to register an account.")
             await ctx.send(f"{member.mention} has {economy_dict[str(member.id)]} credits!")
 
-        @commands.command()
+        @commands.command(aliases=["pd"])
         @commands.guild_only()
         async def payday(self, ctx):
             """Payday!"""
@@ -618,7 +618,9 @@ class Cog:
 
         @commands.command()
         async def profile(self, ctx, tag):
-            stats = await self.get_json(f"/player/{tag}/stats")
+            tag = tag.split("#")[0]
+            tag = tag.upper()
+            stats = await self.get_json(f"/player/{tag}")
             em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
             em.add_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
             await ctx.send(embed=em)
