@@ -295,16 +295,6 @@ class Cog:
                 return False
             return vid[0]['snippet']['title']
 
-        def play_song(self, ctx):
-            if self.vc:
-                try:
-                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song(ctx, queue))
-                except Exception as e:
-                    print(e)
-                queue.pop(0)
-                with open("queue.json", "w") as f:
-                    f.write(json.dumps(queue, indent=4))
-
         class Logger():
             def debug(self, msg):
                 pass
@@ -330,24 +320,12 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        async def leave(self, ctx):
-            """Have the bot leave the music channel."""
-            if not self.vc:
-                return await ctx.send("I can't leave a channel if I'm not in one...")
-            await self.vc.disconnect()
-            self.vc = None
-            await ctx.send("Left the music channel.")
-
-        @commands.command()
-        @commands.guild_only()
-        async def stop(self, ctx):
-            """Stop the music."""
-            if not self.vc:
-                return await ctx.send("I can't stop playing if I'm not even in a voice channel.")
-            if not self.vc.is_playing():
-                return await ctx.send("I'm not even playing music.")
+        async def skip(self, ctx):
+            """Skip the current track."""
+            if not self.vc or self.vc.is_playing():
+                return
             self.vc.stop()
-            await ctx.send("Stopped the music.")
+            await ctx.send("Skipped track.")
 
         @commands.command()
         @commands.guild_only()
@@ -394,9 +372,13 @@ class Cog:
                 with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([url])
             self.queue.append([name, name_file, url])
-
+            try:
+                self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(self.queue[0][1])}-{self.queue[0][2].split("v=")[1]}.mp3'))
+            except Exception as e:
+                print(e)
             while self.vc:
                 if not self.vc.is_playing():
+                    queue.pop(0)
                     if self.queue == []:
                         await self.vc.disconnect()
                         self.vc = None
@@ -405,7 +387,6 @@ class Cog:
                         self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(self.queue[0][1])}-{self.queue[0][2].split("v=")[1]}.mp3'))
                     except Exception as e:
                         print(e)
-                    self.queue.pop(0)
                 try:
                     if len(discord.utils.get(ctx.guild.voice_channels, id=self.vc.channel.id).members) <= 1:
                         await self.vc.disconnect()
