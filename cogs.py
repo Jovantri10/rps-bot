@@ -613,7 +613,7 @@ class Cog:
             self.session = aiohttp.ClientSession()
 
         async def get_json(self, link):
-            async with self.session.get(f"https://api.royaleapi.com{}", headers={"auth": self.key}) as resp:
+            async with self.session.get(f"https://api.royaleapi.com{link}", headers={"auth": self.key}) as resp:
                 return await resp.json()
 
         @commands.command()
