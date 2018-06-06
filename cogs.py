@@ -275,6 +275,7 @@ class Cog:
         def __init__(self, bot):
             self.bot = bot
             self.vc = None
+            self.queue = []
 
         async def get_results(self, video):
             async with self.bot.session.get("https://www.googleapis.com/youtube/v3/search", params={"part": "snippet", "key": "AIzaSyBkL3AijwPXd0fTY900HnPBEjhYh1IOLw0", "q": video}) as resp:
@@ -296,10 +297,8 @@ class Cog:
 
         def play_song(self, ctx):
             if self.vc:
-                with open("queue.json") as f:
-                    queue = json.load(f)["queue"]
                 try:
-                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song(ctx))
+                    self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'), after=self.play_song(ctx, queue))
                 except Exception as e:
                     print(e)
                 queue.pop(0)
@@ -325,9 +324,7 @@ class Cog:
                 return await ctx.send("Already joined a voice channel!")
             try:
                 self.vc = await ctx.author.voice.channel.connect()
-            except Exception as e:
-                pass
-                raise(e)
+            except:
                 return await ctx.send("You're not in a voice channel!")
             await ctx.send("Joined the music channel.")
 
@@ -354,53 +351,61 @@ class Cog:
 
         @commands.command()
         @commands.guild_only()
-        async def play(self, ctx, *, video=None):
+        async def play(self, ctx, *, video):
             """Play some tunes 🎵"""
-            if video:
-                if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch") or video.startswith("https://www.youtube.com/watch") or video.startswith("http://www.youtube.com/watch"):
-                    url = video
-                    name = await self.get_name_from_vid(video)
-                    if not name:
-                        return await ctx.send("That's not a valid url!")
-                else:
-                    url, name = await self.get_results(video)
-                    if not url:
-                        return await ctx.send("There aren't any search results.")
-
-                name_file = []
-                for word in re.split(" |'", name):
-                    print(word[-1])
-                    if "".join(ch for ch in word if ch.isalnum()) != "":
-                        name_file.append("".join(ch for ch in word if ch.isalnum()))
-                    if word[-1] == ":":
-                        name_file.append("-")
-                    if word[-1] == ".":
-                        name_file[-1] += "."
-                    if word == "-":
-                        name_file.append("-")
-
-                if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
-                    ydl_opts = {
-                        'format': 'bestaudio/best',
-                        'postprocessors': [{
-                            'key': 'FFmpegExtractAudio',
-                            'preferredcodec': 'mp3',
-                            'preferredquality': '192',
-                        }],
-                        'logger': self.Logger()
-                    }
-                    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                        ydl.download([url])
-                with open("queue.json") as f:
-                    queue = json.load(f)
-                queue["queue"].append([name, name_file, url])
-                with open("queue.json", "w") as f:
-                    f.write(json.dumps(queue, indent=4))
-
-
             discord.opus.load_opus(ctypes.util.find_library('opus'))
+            if not self.vc:
+                try:
+                    self.vc = await ctx.author.voice.channel.connect()
+                except:
+                    return await ctx.send("You're not in a voice channel!")
+            if video.startswith("http://youtube.com/watch") or video.startswith("https://youtube.com/watch") or video.startswith("https://www.youtube.com/watch") or video.startswith("http://www.youtube.com/watch"):
+                url = video
+                name = await self.get_name_from_vid(video)
+                if not name:
+                    return await ctx.send("That's not a valid url!")
+            else:
+                url, name = await self.get_results(video)
+                if not url:
+                    return await ctx.send("There aren't any search results.")
+
+            name_file = []
+            for word in re.split(" |'", name):
+                print(word[-1])
+                if "".join(ch for ch in word if ch.isalnum()) != "":
+                    name_file.append("".join(ch for ch in word if ch.isalnum()))
+                if word[-1] == ":":
+                    name_file.append("-")
+                if word[-1] == ".":
+                    name_file[-1] += "."
+                if word == "-":
+                    name_file.append("-")
+
+            if f'{"_".join(name_file)}-{url.split("v=")[1]}.mp3' not in os.listdir('.'):
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                    'logger': self.Logger()
+                }
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([url])
+            self.queue.append([name, name_file, url])
+
             while self.vc:
-                self.play_song(ctx)
+                if not self.vc.is_playing():
+                    if self.queue == []:
+                        await self.vc.disconnect()
+                        self.vc = None
+                        return await ctx.send("Queue finished.")
+                    try:
+                        self.vc.play(discord.FFmpegPCMAudio(f'{"_".join(queue[0][1])}-{queue[0][2].split("v=")[1]}.mp3'))
+                    except Exception as e:
+                        print(e)
+                    self.queue.pop(0)
                 try:
                     if len(discord.utils.get(ctx.guild.voice_channels, id=self.vc.channel.id).members) <= 1:
                         await self.vc.disconnect()
