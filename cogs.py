@@ -419,8 +419,6 @@ class Cog:
                 f.write(json.dumps(economy_dict, indent=4))
             await ctx.send("Account registered.")
 
-        
-
         @commands.command()
         @commands.guild_only()
         async def blackjack(self, ctx, bid):
@@ -605,3 +603,25 @@ class Cog:
             with open("econ.json", "w") as f:
                 f.write(json.dumps(economy_dict, indent=4))
             return await ctx.send(embed=em)
+
+    class Stats:
+        
+        def __init__(self, bot):
+            self.bot = bot
+            with open("crapikey.json") as f:
+                self.key = json.load(f)["key"]
+            self.session = aiohttp.ClientSession()
+
+        async def get_json(self, link):
+            async with self.session.get(f"https://api.royaleapi.com{}", headers={"auth": self.key}) as resp:
+                return await resp.json()
+
+        @commands.command()
+        async def profile(self, ctx, tag):
+            stats = await self.get_json("/player/stats")
+            em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
+            em.add_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
+            await ctx.send(embed=discord.Embed)
+
+        
+        
