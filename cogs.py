@@ -618,7 +618,7 @@ class Cog:
 
         @commands.command()
         async def profile(self, ctx, tag):
-            stats = await self.get_json("/player/stats")
+            stats = await self.get_json(f"/player/{tag}/stats")
             em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
             em.add_author(name=ctx.guild.author, icon_url=ctx.guild.author.icon_url)
             await ctx.send(embed=em)
