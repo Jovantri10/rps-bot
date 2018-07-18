@@ -621,8 +621,9 @@ class Cog:
             tag = tag.split("#")[0]
             tag = tag.upper()
             stats = await self.get_json(f"/player/{tag}")
-            em = discord.Embed(color=0x181818, title=f"{stats['name']}'s Stats'")
+            em = discord.Embed(color=0x181818, title=f"{stats['name']} ({stats['tag']})'s Stats")
             em.set_author(name=ctx.author, icon_url=ctx.author.avatar_url)
+            em.
             await ctx.send(embed=em)
 
         

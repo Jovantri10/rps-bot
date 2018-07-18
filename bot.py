@@ -270,6 +270,7 @@ class RPSBot(commands.Bot):
         """Translate messages into different languages."""
         with open("langcodes.json") as f:
             langcodes = json.load(f)
+            print(langcodes)
         for lang_test in langcodes:
             if language.title() == lang_test["name"] or language.lower() == lang_test["code"]:
                 lang_set = lang_test
